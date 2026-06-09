@@ -16,9 +16,9 @@ class TK_Documentation {
         add_submenu_page(
             'edit.php?post_type=tk_route',
             '',
-            __( 'Documentation', 'trailkit' ),
+            __( 'Documentation', 'trailplugin' ),
             'edit_posts',
-            'trailkit-docs',
+            'trailplugin-docs',
             '__return_null'
         );
     }
@@ -31,7 +31,7 @@ class TK_Documentation {
         $parent = 'edit.php?post_type=tk_route';
         if ( ! isset( $submenu[ $parent ] ) ) return;
         foreach ( $submenu[ $parent ] as &$item ) {
-            if ( isset( $item[2] ) && $item[2] === 'trailkit-docs' ) {
+            if ( isset( $item[2] ) && $item[2] === 'trailplugin-docs' ) {
                 $item[2] = self::DOCS_URL;
                 break;
             }
@@ -40,7 +40,7 @@ class TK_Documentation {
 
     public static function styles( $hook ) {
         // No internal docs page — kept for back-compat, never fires.
-        if ( $hook !== 'trailkit_page_trailkit-docs' ) return;
+        if ( $hook !== 'trailplugin_page_trailplugin-docs' ) return;
         wp_add_inline_style( 'wp-admin', self::get_css() );
     }
 
@@ -123,7 +123,7 @@ class TK_Documentation {
                 TrailKit — Documentation
                 <span class="tk-docs-version">v<?php echo TK_VERSION ?> <?php echo $is_pro ? '<span class="tk-docs-badge tk-docs-badge-pro">PRO</span>' : '<span class="tk-docs-badge tk-docs-badge-lite">LITE</span>' ?></span>
             </h1>
-            <p style="color:#666;margin:4px 0 0"><?php _e('Complete reference for TrailKit — Adventure Routes, POIs & Guides for WordPress.','trailkit') ?></p>
+            <p style="color:#666;margin:4px 0 0"><?php _e('Complete reference for TrailKit — Adventure Routes, POIs & Guides for WordPress.','trailplugin') ?></p>
 
             <div class="tk-docs-tabs">
                 <?php foreach ( $tabs as $key => $label ): ?>
@@ -188,7 +188,7 @@ class TK_Documentation {
             <h3 id="start-install">Installation</h3>
             <ol>
                 <li>Go to <strong>Plugins → Add New → Upload Plugin</strong></li>
-                <li>Upload <code>trailkit.zip</code> and click <strong>Install Now</strong></li>
+                <li>Upload <code>trailplugin.zip</code> and click <strong>Install Now</strong></li>
                 <li>Click <strong>Activate</strong></li>
                 <li>Go to <strong>Routes → Settings</strong> to configure URL slugs and map defaults</li>
                 <li>Go to <strong>Settings → Permalinks</strong> and click Save (required after activation)</li>
@@ -248,7 +248,7 @@ class TK_Documentation {
                 </div>
                 <div class="tk-docs-card">
                     <h4>⚙️ Settings</h4>
-                    <p><a href="<?php echo admin_url('edit.php?post_type=tk_route&page=trailkit-settings') ?>">Configure slugs, map center, demo data, and Pro license.</a></p>
+                    <p><a href="<?php echo admin_url('edit.php?post_type=tk_route&page=trailplugin-settings') ?>">Configure slugs, map center, demo data, and Pro license.</a></p>
                 </div>
             </div>
         </div>
@@ -489,11 +489,11 @@ class TK_Documentation {
             <p>TrailKit uses a WooCommerce-style template override system. Copy any template to your theme and edit it freely — plugin updates will never overwrite your customisations.</p>
 
             <h3>How it works</h3>
-            <p>Create a <code>trailkit/</code> folder inside your active theme directory, then copy the template file there:</p>
+            <p>Create a <code>trailplugin/</code> folder inside your active theme directory, then copy the template file there:</p>
             <pre><code>wp-content/
   themes/
     your-theme/
-      trailkit/           ← create this folder
+      trailplugin/           ← create this folder
         single-route.php  ← your override
         route-card.php    ← another override
         ...</code></pre>
@@ -624,7 +624,7 @@ if ( tk_is_pro() ) {
             <p>To fully replace TrailKit CSS with your own:</p>
             <pre><code>// In your theme's functions.php
 add_action('wp_enqueue_scripts', function() {
-    wp_dequeue_style('trailkit');
+    wp_dequeue_style('trailplugin');
 }, 20);
 
 // Then add your own CSS file that targets .tk-* classes</code></pre>
@@ -641,7 +641,7 @@ add_action('wp_enqueue_scripts', function() {
                 <p><strong>TrailKit Pro is active.</strong> You have access to all Pro features.</p>
                 <?php else: ?>
                 <span>ℹ️</span>
-                <p>You are using <strong>TrailKit Lite</strong>. <a href="<?php echo admin_url('edit.php?post_type=tk_route&page=trailkit-settings') ?>">Activate a Pro license</a> or <a href="https://trailplugin.com" target="_blank">get one at trailplugin.com</a> to unlock all features.</p>
+                <p>You are using <strong>TrailKit Lite</strong>. <a href="<?php echo admin_url('edit.php?post_type=tk_route&page=trailplugin-settings') ?>">Activate a Pro license</a> or <a href="https://trailplugin.com" target="_blank">get one at trailplugin.com</a> to unlock all features.</p>
                 <?php endif; ?>
             </div>
 
@@ -667,7 +667,7 @@ add_action('wp_enqueue_scripts', function() {
 
             <h3>Activating your license</h3>
             <ol>
-                <li>Go to <a href="<?php echo admin_url('edit.php?post_type=tk_route&page=trailkit-settings') ?>"><strong>Routes → Settings → Pro License</strong></a></li>
+                <li>Go to <a href="<?php echo admin_url('edit.php?post_type=tk_route&page=trailplugin-settings') ?>"><strong>Routes → Settings → Pro License</strong></a></li>
                 <li>Paste your license key (format: <code>TK-XXXX-XXXX-XXXX-XXXX</code>)</li>
                 <li>Click <strong>Activate License</strong></li>
                 <li>The page reloads showing a green <strong>Active</strong> badge</li>
@@ -690,7 +690,7 @@ add_action('wp_enqueue_scripts', function() {
             <h3>14-Day Free Trial</h3>
             <p>Try all Pro features free for 14 days — no credit card required.</p>
             <ol>
-                <li>Go to <a href="<?php echo admin_url('edit.php?post_type=tk_route&page=trailkit-settings') ?>">Routes → Settings → Pro License</a></li>
+                <li>Go to <a href="<?php echo admin_url('edit.php?post_type=tk_route&page=trailplugin-settings') ?>">Routes → Settings → Pro License</a></li>
                 <li>Enter your email in the <strong>Start 14-Day Trial</strong> section</li>
                 <li>Click <strong>Start 14-Day Trial</strong></li>
                 <li>The trial key is emailed to you and activated automatically</li>
@@ -755,7 +755,7 @@ add_action('wp_enqueue_scripts', function() {
                 ],
                 [
                     'q' => 'Can I translate TrailKit into my language?',
-                    'a' => 'Yes. TrailKit uses the text domain <code>trailkit</code> and includes a <code>languages/trailkit.pot</code> file. Use <a href="https://poedit.net/" target="_blank">Poedit</a> to create a <code>.po</code> and <code>.mo</code> file for your language, then upload to <code>wp-content/languages/plugins/</code>.',
+                    'a' => 'Yes. TrailKit uses the text domain <code>trailplugin</code> and includes a <code>languages/trailplugin.pot</code> file. Use <a href="https://poedit.net/" target="_blank">Poedit</a> to create a <code>.po</code> and <code>.mo</code> file for your language, then upload to <code>wp-content/languages/plugins/</code>.',
                     'type' => 'tip',
                 ],
                 [

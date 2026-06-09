@@ -14,9 +14,9 @@ class TK_Route_Fields {
 
     /* ── Native meta boxes (no ACF) ────────────── */
     public static function register_meta_boxes() {
-        add_meta_box( 'tk-route-stats',  __( 'Route Details', 'trailkit' ),    [ self::class, 'box_stats'  ], 'tk_route', 'normal', 'high' );
-        add_meta_box( 'tk-route-gps',    __( 'GPS & Map',     'trailkit' ),    [ self::class, 'box_gps'    ], 'tk_route', 'normal' );
-        add_meta_box( 'tk-route-media',  __( 'Gallery & Links', 'trailkit' ),  [ self::class, 'box_media'  ], 'tk_route', 'side' );
+        add_meta_box( 'tk-route-stats',  __( 'Route Details', 'trailplugin' ),    [ self::class, 'box_stats'  ], 'tk_route', 'normal', 'high' );
+        add_meta_box( 'tk-route-gps',    __( 'GPS & Map',     'trailplugin' ),    [ self::class, 'box_gps'    ], 'tk_route', 'normal' );
+        add_meta_box( 'tk-route-media',  __( 'Gallery & Links', 'trailplugin' ),  [ self::class, 'box_media'  ], 'tk_route', 'side' );
     }
 
     public static function box_stats( $post ) {
@@ -25,35 +25,35 @@ class TK_Route_Fields {
         ?>
         <table class="tk-meta-table">
             <tr>
-                <td><label><?php esc_html_e('Difficulty','trailkit') ?></label>
+                <td><label><?php esc_html_e('Difficulty','trailplugin') ?></label>
                 <select name="_tk_difficulty">
                     <?php foreach ( ['easy'=>'Easy','moderate'=>'Moderate','hard'=>'Hard','extreme'=>'Extreme'] as $v => $l ): ?>
                         <option value="<?php echo esc_attr($v) ?>" <?php selected($d['difficulty'],$v) ?>><?php echo esc_html($l) ?></option>
                     <?php endforeach; ?>
                 </select></td>
-                <td><label><?php esc_html_e('Distance (km)','trailkit') ?></label>
+                <td><label><?php esc_html_e('Distance (km)','trailplugin') ?></label>
                 <input type="number" step="0.1" name="_tk_distance" value="<?php echo esc_attr($d['distance']) ?>"></td>
             </tr>
             <tr>
-                <td><label><?php esc_html_e('Elevation gain (m)','trailkit') ?></label>
+                <td><label><?php esc_html_e('Elevation gain (m)','trailplugin') ?></label>
                 <input type="number" name="_tk_elevation" value="<?php echo esc_attr($d['elevation']) ?>"></td>
-                <td><label><?php esc_html_e('Estimated time','trailkit') ?></label>
+                <td><label><?php esc_html_e('Estimated time','trailplugin') ?></label>
                 <input type="text" name="_tk_time" value="<?php echo esc_attr($d['time']) ?>" placeholder="e.g. 3-4 hours"></td>
             </tr>
             <tr>
-                <td><label><?php esc_html_e('Start latitude','trailkit') ?></label>
+                <td><label><?php esc_html_e('Start latitude','trailplugin') ?></label>
                 <input type="text" name="_tk_lat" value="<?php echo esc_attr($d['lat']) ?>" placeholder="10.4806"></td>
-                <td><label><?php esc_html_e('Start longitude','trailkit') ?></label>
+                <td><label><?php esc_html_e('Start longitude','trailplugin') ?></label>
                 <input type="text" name="_tk_lng" value="<?php echo esc_attr($d['lng']) ?>" placeholder="-66.9036"></td>
             </tr>
             <tr>
-                <td colspan="2"><label><?php esc_html_e('Conditions alert (optional)','trailkit') ?></label>
+                <td colspan="2"><label><?php esc_html_e('Conditions alert (optional)','trailplugin') ?></label>
                 <input type="text" name="_tk_conditions_alert" value="<?php echo esc_attr($d['conditions_alert']) ?>" style="width:100%" placeholder="e.g. Trail closed in rainy season"></td>
             </tr>
             <tr>
-                <td><label><?php esc_html_e('Hero image position','trailkit') ?></label>
+                <td><label><?php esc_html_e('Hero image position','trailplugin') ?></label>
                 <input type="text" name="_tk_hero_position" value="<?php echo esc_attr($d['hero_position']) ?>" placeholder="center center"></td>
-                <td><label><?php esc_html_e('Google Maps link','trailkit') ?></label>
+                <td><label><?php esc_html_e('Google Maps link','trailplugin') ?></label>
                 <input type="url" name="_tk_gmaps_url" value="<?php echo esc_attr($d['gmaps_url']) ?>" style="width:100%"></td>
             </tr>
             <tr>
@@ -61,14 +61,14 @@ class TK_Route_Fields {
                     <label style="display:flex;align-items:center;gap:8px;cursor:pointer">
                         <input type="checkbox" name="_tk_weather_enabled" value="1" <?php checked( $d['weather_enabled'], '1' ) ?>
                             <?php if ( TK_LITE ) echo 'disabled'; ?>>
-                        <span><?php esc_html_e( 'Show live weather widget alongside difficulty', 'trailkit' ) ?></span>
+                        <span><?php esc_html_e( 'Show live weather widget alongside difficulty', 'trailplugin' ) ?></span>
                         <?php if ( TK_LITE ): ?>
                             <span style="background:#fef3c7;color:#92400e;font-size:0.72em;padding:2px 7px;border-radius:4px;font-weight:700">
-                                <?php esc_html_e( 'Pro', 'trailkit' ) ?>
+                                <?php esc_html_e( 'Pro', 'trailplugin' ) ?>
                             </span>
                         <?php else: ?>
                             <span style="color:#6b7280;font-size:0.8em">
-                                <?php esc_html_e( '(fetches from Open-Meteo — free, no API key needed)', 'trailkit' ) ?>
+                                <?php esc_html_e( '(fetches from Open-Meteo — free, no API key needed)', 'trailplugin' ) ?>
                             </span>
                         <?php endif; ?>
                     </label>
@@ -82,18 +82,18 @@ class TK_Route_Fields {
         $points = get_post_meta( $post->ID, '_tk_points', true );
         $json   = $points ? $points : '';
         ?>
-        <p class="description"><?php _e( 'Paste a JSON array of GPS points: <code>[{"lat":10.48,"lng":-66.90,"ele":900},...]</code>. Or upload a .gpx file.', 'trailkit' ) ?></p>
+        <p class="description"><?php _e( 'Paste a JSON array of GPS points: <code>[{"lat":10.48,"lng":-66.90,"ele":900},...]</code>. Or upload a .gpx file.', 'trailplugin' ) ?></p>
         <textarea name="_tk_points" rows="6" style="width:100%;font-family:monospace;font-size:12px"><?php echo esc_textarea( $json ) ?></textarea>
         <?php if ( ! TK_LITE ): ?>
         <p style="margin-top:8px;display:flex;align-items:center;gap:10px;flex-wrap:wrap">
             <button type="button" class="button tk-gpx-trigger" id="tk-gpx-trigger">
-                <?php esc_html_e( 'Import GPX', 'trailkit' ) ?>
+                <?php esc_html_e( 'Import GPX', 'trailplugin' ) ?>
             </button>
             <input type="file" id="tk-gpx-file" name="tk_gpx_file" accept=".gpx" style="display:none">
             <span id="tk-gpx-status" style="font-size:0.85em;color:#6b7280"></span>
         </p>
         <?php else: ?>
-        <p class="tk-lite-note"><?php esc_html_e( 'GPX import available in TrailKit Pro.', 'trailkit' ) ?></p>
+        <p class="tk-lite-note"><?php esc_html_e( 'GPX import available in TrailKit Pro.', 'trailplugin' ) ?></p>
         <?php endif; ?>
         <?php
     }
@@ -103,10 +103,10 @@ class TK_Route_Fields {
         ?>
         <?php if ( TK_LITE ): ?>
         <p class="description" style="margin-bottom:6px;color:#b45309">
-            <?php printf( __( '&#9888; Lite: max %d images. <a href="https://trailplugin.com" target="_blank">Upgrade to Pro</a> for unlimited.', 'trailkit' ), TK_GALLERY_LIMIT ) ?>
+            <?php printf( __( '&#9888; Lite: max %d images. <a href="https://trailplugin.com" target="_blank">Upgrade to Pro</a> for unlimited.', 'trailplugin' ), TK_GALLERY_LIMIT ) ?>
         </p>
         <?php endif; ?>
-        <p><label><?php _e('Gallery','trailkit') ?></label></p>
+        <p><label><?php _e('Gallery','trailplugin') ?></label></p>
         <input type="hidden" name="_tk_gallery" id="tk_gallery_ids" value="<?php echo esc_attr($d['gallery']) ?>">
         <div id="tk-gallery-preview" style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:8px">
             <?php
@@ -117,7 +117,7 @@ class TK_Route_Fields {
             }
             ?>
         </div>
-        <button type="button" class="button tk-gallery-btn" data-target="tk_gallery_ids" data-preview="tk-gallery-preview"><?php _e('Select Images','trailkit') ?></button>
+        <button type="button" class="button tk-gallery-btn" data-target="tk_gallery_ids" data-preview="tk-gallery-preview"><?php _e('Select Images','trailplugin') ?></button>
         <?php
     }
 
@@ -182,7 +182,7 @@ class TK_Route_Fields {
         if ( ! $screen || $screen->post_type !== 'tk_route' ) return;
         if ( ! tk_at_limit( 'tk_route' ) ) return;
         echo '<div class="notice notice-warning"><p>'
-           . sprintf( __( '<strong>TrailKit Lite:</strong> You have reached the %d route limit. <a href="#">Upgrade to Pro</a> for unlimited routes.', 'trailkit' ), TK_LIMIT )
+           . sprintf( __( '<strong>TrailKit Lite:</strong> You have reached the %d route limit. <a href="#">Upgrade to Pro</a> for unlimited routes.', 'trailplugin' ), TK_LIMIT )
            . '</p></div>';
     }
 }

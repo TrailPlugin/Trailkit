@@ -1,7 +1,7 @@
 <?php
 /**
  * Single Route Template
- * Override: copy to {theme}/trailkit/single-route.php
+ * Override: copy to {theme}/trailplugin/single-route.php
  */
 if ( ! defined( 'ABSPATH' ) ) exit;
 
@@ -34,7 +34,7 @@ get_header();
         <div class="tk-single__hero-overlay"></div>
         <div class="tk-single__hero-content">
             <div class="tk-single__breadcrumb">
-                <a href="<?php echo esc_url( get_post_type_archive_link('tk_route') ) ?>"><?php _e('Routes','trailkit') ?></a>
+                <a href="<?php echo esc_url( get_post_type_archive_link('tk_route') ) ?>"><?php _e('Routes','trailplugin') ?></a>
                 <span>›</span>
                 <span><?php the_title() ?></span>
             </div>
@@ -62,7 +62,7 @@ get_header();
                 <span class="tk-single__stat-icon tk-single__stat-icon--<?php echo esc_attr($diff) ?>">
                     <?php echo esc_html($diff_label) ?>
                 </span>
-                <span class="tk-single__stat-label"><?php esc_html_e('Difficulty','trailkit') ?></span>
+                <span class="tk-single__stat-label"><?php esc_html_e('Difficulty','trailplugin') ?></span>
             </div>
             <?php /* ── Weather widget — Pro only, toggle per route ── */ ?>
             <?php if ( ! TK_LITE && $data['weather_enabled'] && $data['lat'] && $data['lng'] ): ?>
@@ -72,25 +72,25 @@ get_header();
                 <span class="tk-single__stat-value" id="tk-weather-display">
                     <span class="tk-weather-loading"></span>
                 </span>
-                <span class="tk-single__stat-label"><?php esc_html_e('Weather','trailkit') ?></span>
+                <span class="tk-single__stat-label"><?php esc_html_e('Weather','trailplugin') ?></span>
             </div>
             <?php endif; ?>
             <?php if ( $data['distance'] ): ?>
             <div class="tk-single__stat">
                 <span class="tk-single__stat-value"><?php echo esc_html($data['distance']) ?> km</span>
-                <span class="tk-single__stat-label"><?php esc_html_e('Distance','trailkit') ?></span>
+                <span class="tk-single__stat-label"><?php esc_html_e('Distance','trailplugin') ?></span>
             </div>
             <?php endif; ?>
             <?php if ( $data['elevation'] ): ?>
             <div class="tk-single__stat">
                 <span class="tk-single__stat-value">↑ <?php echo esc_html($data['elevation']) ?> m</span>
-                <span class="tk-single__stat-label"><?php esc_html_e('Elevation gain','trailkit') ?></span>
+                <span class="tk-single__stat-label"><?php esc_html_e('Elevation gain','trailplugin') ?></span>
             </div>
             <?php endif; ?>
             <?php if ( $data['time'] ): ?>
             <div class="tk-single__stat">
                 <span class="tk-single__stat-value"><?php echo esc_html($data['time']) ?></span>
-                <span class="tk-single__stat-label"><?php esc_html_e('Duration','trailkit') ?></span>
+                <span class="tk-single__stat-label"><?php esc_html_e('Duration','trailplugin') ?></span>
             </div>
             <?php endif; ?>
         </div>
@@ -120,13 +120,13 @@ get_header();
         <div class="tk-single__section">
             <h2 class="tk-single__section-title">
                 <svg viewBox="0 0 20 20" fill="currentColor" width="18" height="18"><path fill-rule="evenodd" d="M9.69 18.933l.003.001C9.89 19.02 10 19 10 19s.11.02.308-.066l.002-.001.006-.003.018-.008a5.741 5.741 0 00.281-.14c.186-.096.446-.24.757-.433.62-.387 1.436-.957 2.255-1.716C15.046 15.23 17 12.558 17 9A7 7 0 103 9c0 3.558 1.954 6.23 3.373 7.633.819.76 1.635 1.329 2.255 1.716a13.4 13.4 0 001.061.571l.018.008.006.003zM10 11.25a2.25 2.25 0 100-4.5 2.25 2.25 0 000 4.5z" clip-rule="evenodd"/></svg>
-                <?php esc_html_e('Map & Location','trailkit') ?>
+                <?php esc_html_e('Map & Location','trailplugin') ?>
             </h2>
             <div id="tk-single-map" class="tk-map" style="height:400px;border-radius:12px;overflow:hidden;border:1px solid var(--tk-border)"></div>
             <?php if ( $data['gmaps_url'] ): ?>
             <a href="<?php echo esc_url($data['gmaps_url']) ?>" target="_blank" rel="noopener" class="tk-btn tk-btn--outline" style="margin-top:12px;display:inline-flex">
                 <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16"><path fill-rule="evenodd" d="M9.69 18.933l.003.001C9.89 19.02 10 19 10 19s.11.02.308-.066l.002-.001.006-.003.018-.008a5.741 5.741 0 00.281-.14c.186-.096.446-.24.757-.433.62-.387 1.436-.957 2.255-1.716C15.046 15.23 17 12.558 17 9A7 7 0 103 9c0 3.558 1.954 6.23 3.373 7.633.819.76 1.635 1.329 2.255 1.716a13.4 13.4 0 001.061.571l.018.008.006.003zM10 11.25a2.25 2.25 0 100-4.5 2.25 2.25 0 000 4.5z" clip-rule="evenodd"/></svg>
-                <?php esc_html_e('Open in Google Maps','trailkit') ?>
+                <?php esc_html_e('Open in Google Maps','trailplugin') ?>
             </a>
             <?php endif; ?>
             <script>
@@ -142,8 +142,8 @@ get_header();
                 ?>;
                 var poly = L.polyline(latlngs, { color:'#0df246', weight:4, opacity:0.85 }).addTo(map);
                 map.fitBounds(poly.getBounds(), { padding:[40,40] });
-                L.marker(latlngs[0]).addTo(map).bindPopup('<?php echo esc_js(__('Start','trailkit')) ?>').openPopup();
-                L.marker(latlngs[latlngs.length - 1]).addTo(map).bindPopup('<?php echo esc_js(__('End','trailkit')) ?>');
+                L.marker(latlngs[0]).addTo(map).bindPopup('<?php echo esc_js(__('Start','trailplugin')) ?>').openPopup();
+                L.marker(latlngs[latlngs.length - 1]).addTo(map).bindPopup('<?php echo esc_js(__('End','trailplugin')) ?>');
                 <?php else: ?>
                 map.setView([<?php echo floatval($data['lat']) ?>, <?php echo floatval($data['lng']) ?>], 13);
                 L.marker([<?php echo floatval($data['lat']) ?>, <?php echo floatval($data['lng']) ?>]).addTo(map).bindPopup('<?php echo esc_js(get_the_title()) ?>').openPopup();
@@ -192,7 +192,7 @@ get_header();
         <div class="tk-single__section">
             <h2 class="tk-single__section-title">
                 <svg viewBox="0 0 20 20" fill="currentColor" width="18" height="18"><path d="M2 14l4.5-7 3.5 4 3-3.5L17 14H2z"/></svg>
-                <?php esc_html_e( 'Elevation Profile', 'trailkit' ) ?>
+                <?php esc_html_e( 'Elevation Profile', 'trailplugin' ) ?>
                 <span class="tk-ele-gain">+<?php echo esc_html( round( $ele_gain ) ) ?> m</span>
             </h2>
             <div id="tk-ele-chart-wrap" class="tk-ele-chart-wrap">
@@ -331,7 +331,7 @@ get_header();
         <div class="tk-single__section">
             <h2 class="tk-single__section-title">
                 <svg viewBox="0 0 20 20" fill="currentColor" width="18" height="18"><path fill-rule="evenodd" d="M1 5.25A2.25 2.25 0 013.25 3h13.5A2.25 2.25 0 0119 5.25v9.5A2.25 2.25 0 0116.75 17H3.25A2.25 2.25 0 011 14.75v-9.5zm1.5 5.81v3.69c0 .414.336.75.75.75h13.5a.75.75 0 00.75-.75v-2.69l-2.22-2.219a.75.75 0 00-1.06 0l-1.91 1.909.47.47a.75.75 0 11-1.06 1.06L6.53 8.091a.75.75 0 00-1.06 0l-3 2.97v-.001zm6.063-6.81a1.688 1.688 0 110 3.375 1.688 1.688 0 010-3.375z" clip-rule="evenodd"/></svg>
-                <?php _e('Gallery','trailkit') ?>
+                <?php _e('Gallery','trailplugin') ?>
             </h2>
             <div class="tk-gallery">
                 <?php foreach ( $gallery_ids as $img_id ):
@@ -340,7 +340,7 @@ get_header();
                     if (!$src) continue;
                 ?>
                 <a href="<?php echo esc_url($full) ?>" class="tk-gallery__item">
-                    <img src="<?php echo esc_url($src) ?>" alt="<?php echo esc_attr( sprintf( __( '%s — gallery image', 'trailkit' ), get_the_title() ) ) ?>" loading="lazy">
+                    <img src="<?php echo esc_url($src) ?>" alt="<?php echo esc_attr( sprintf( __( '%s — gallery image', 'trailplugin' ), get_the_title() ) ) ?>" loading="lazy">
                 </a>
                 <?php endforeach; ?>
             </div>

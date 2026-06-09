@@ -222,7 +222,7 @@ class TK_Demo {
         $pages = [
             [
                 'title'   => 'Routes',
-                'slug'    => 'trailkit-routes',
+                'slug'    => 'trailplugin-routes',
                 'content' => '<!-- wp:paragraph --><p>Explore our curated collection of adventure routes. Filter by activity, difficulty, or region.</p><!-- /wp:paragraph -->
 
 <!-- wp:shortcode -->
@@ -235,7 +235,7 @@ class TK_Demo {
             ],
             [
                 'title'   => 'Points of Interest',
-                'slug'    => 'trailkit-pois',
+                'slug'    => 'trailplugin-pois',
                 'content' => '<!-- wp:paragraph --><p>Discover remarkable natural and cultural points of interest across the region.</p><!-- /wp:paragraph -->
 
 <!-- wp:shortcode -->
@@ -248,7 +248,7 @@ class TK_Demo {
             ],
             [
                 'title'   => 'Guides',
-                'slug'    => 'trailkit-guides',
+                'slug'    => 'trailplugin-guides',
                 'content' => '<!-- wp:paragraph --><p>Connect with certified local guides for a safe and authentic adventure experience.</p><!-- /wp:paragraph -->
 
 <!-- wp:shortcode -->

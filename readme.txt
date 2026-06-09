@@ -60,7 +60,7 @@ When you activate a Pro license key, the plugin contacts the TrailKit license se
 
 == Installation ==
 
-1. Upload the plugin files to `/wp-content/plugins/trailkit/`
+1. Upload the plugin files to `/wp-content/plugins/trailplugin/`
 2. Activate the plugin through the 'Plugins' screen in WordPress
 3. Go to Routes → Settings to configure slugs and map defaults
 4. Add `[tk_routes]` to any page to display your routes
@@ -72,7 +72,7 @@ When you activate a Pro license key, the plugin contacts the TrailKit license se
 No. TrailKit works entirely with native WordPress meta boxes. There are no required dependencies — just install and activate.
 
 = Can I customize the card templates? =
-Yes. Copy any file from `wp-content/plugins/trailkit/templates/` to `wp-content/themes/your-theme/trailkit/` and edit it freely.
+Yes. Copy any file from `wp-content/plugins/trailplugin/templates/` to `wp-content/themes/your-theme/trailplugin/` and edit it freely.
 
 = What is the Lite limit? =
 3 routes, 3 POIs, and 1 guide. [Upgrade to Pro](https://trailplugin.com) for unlimited content.

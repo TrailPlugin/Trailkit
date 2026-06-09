@@ -5,7 +5,7 @@
  * Description: Adventure Routes, Points of Interest & Guides for WordPress. Works with any theme.
  * Version:     1.0.0
  * Author:      Gabriel Arias
- * Text Domain: trailkit
+ * Text Domain: trailplugin
  * Domain Path: /languages
  * License:     GPL-2.0+
  */
@@ -79,7 +79,7 @@ require TK_DIR . 'admin/documentation.php';
 /* ── Hooks ────────────────────────────────────────── */
 add_action( 'init', 'tk_load_textdomain', 5 );
 function tk_load_textdomain() {
-    load_plugin_textdomain( 'trailkit', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
+    load_plugin_textdomain( 'trailplugin', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
 }
 
 add_action( 'init', [ 'TK_CPT',          'register' ] );
@@ -106,7 +106,7 @@ function tk_ajax_install_demo() {
     if ( ! current_user_can( 'manage_options' ) ) wp_die( 'Forbidden' );
     delete_option( 'tk_demo_installed' ); // allow re-install
     TK_Demo::install();
-    wp_send_json_success( [ 'message' => __( 'Demo data installed. Pages created: Routes, Points of Interest, Guides.', 'trailkit' ) ] );
+    wp_send_json_success( [ 'message' => __( 'Demo data installed. Pages created: Routes, Points of Interest, Guides.', 'trailplugin' ) ] );
 }
 
 add_action( 'wp_ajax_tk_remove_demo', 'tk_ajax_remove_demo' );
@@ -114,7 +114,7 @@ function tk_ajax_remove_demo() {
     check_ajax_referer( 'tk_demo_nonce', 'nonce' );
     if ( ! current_user_can( 'manage_options' ) ) wp_die( 'Forbidden' );
     TK_Demo::uninstall();
-    wp_send_json_success( [ 'message' => __( 'Demo data removed.', 'trailkit' ) ] );
+    wp_send_json_success( [ 'message' => __( 'Demo data removed.', 'trailplugin' ) ] );
 }
 
 /* ── Frontend assets (only where needed) ─────────── */
@@ -123,10 +123,10 @@ function tk_enqueue() {
 
     wp_enqueue_style(  'leaflet',   'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css', [], '1.9.4' );
     wp_enqueue_script( 'leaflet',   'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js',  [], '1.9.4', true );
-    wp_enqueue_style(  'trailkit',  TK_URL . 'assets/trailkit.css', [ 'leaflet' ], TK_VERSION );
-    wp_enqueue_script( 'trailkit',  TK_URL . 'assets/trailkit.js',  [ 'leaflet' ], TK_VERSION, true );
+    wp_enqueue_style(  'trailplugin',  TK_URL . 'assets/trailplugin.css', [ 'leaflet' ], TK_VERSION );
+    wp_enqueue_script( 'trailplugin',  TK_URL . 'assets/trailplugin.js',  [ 'leaflet' ], TK_VERSION, true );
 
-    wp_localize_script( 'trailkit', 'tkData', [
+    wp_localize_script( 'trailplugin', 'tkData', [
         'ajaxurl' => admin_url( 'admin-ajax.php' ),
         'nonce'   => wp_create_nonce( 'tk_nonce' ),
         'lite'    => TK_LITE,
@@ -151,15 +151,15 @@ function tk_admin_enqueue( $hook ) {
     $cpts = [ 'tk_route', 'tk_poi', 'tk_guide' ];
     $on_cpt_edit = in_array( $hook, [ 'post.php', 'post-new.php' ] )
                    && $post && in_array( $post->post_type, $cpts );
-    $on_settings = ( $hook === 'trailkit_page_trailkit-settings' );
+    $on_settings = ( $hook === 'trailplugin_page_trailplugin-settings' );
 
     if ( ! $on_cpt_edit && ! $on_settings ) return;
 
     wp_enqueue_media();
-    wp_enqueue_style(  'trailkit-admin', TK_URL . 'assets/admin.css', [], TK_VERSION );
+    wp_enqueue_style(  'trailplugin-admin', TK_URL . 'assets/admin.css', [], TK_VERSION );
     // 'media-editor' dependency ensures wp.media is initialized before our script runs.
-    wp_enqueue_script( 'trailkit', TK_URL . 'assets/trailkit.js', [ 'jquery', 'media-editor' ], TK_VERSION, true );
-    wp_localize_script( 'trailkit', 'tkData', [
+    wp_enqueue_script( 'trailplugin', TK_URL . 'assets/trailplugin.js', [ 'jquery', 'media-editor' ], TK_VERSION, true );
+    wp_localize_script( 'trailplugin', 'tkData', [
         'ajaxurl' => admin_url( 'admin-ajax.php' ),
         'nonce'   => wp_create_nonce( 'tk_nonce' ),
         'lite'    => TK_LITE,
@@ -168,7 +168,7 @@ function tk_admin_enqueue( $hook ) {
 
 /* ── Template loader (theme-overrideable) ─────────── */
 function tk_get_template( $name, $vars = [] ) {
-    $theme_file  = get_stylesheet_directory() . '/trailkit/' . $name;
+    $theme_file  = get_stylesheet_directory() . '/trailplugin/' . $name;
     $plugin_file = TK_DIR . 'templates/' . $name;
     $file        = file_exists( $theme_file ) ? $theme_file : $plugin_file;
     if ( ! file_exists( $file ) ) return;
@@ -188,7 +188,7 @@ function tk_template_include( $template ) {
         $post_type = get_post_type();
         $tpl_name  = $map[ $post_type ] ?? null;
         if ( $tpl_name ) {
-            $theme_file  = get_stylesheet_directory() . '/trailkit/' . $tpl_name;
+            $theme_file  = get_stylesheet_directory() . '/trailplugin/' . $tpl_name;
             $plugin_file = TK_DIR . 'templates/' . $tpl_name;
             $found = file_exists( $theme_file ) ? $theme_file : ( file_exists( $plugin_file ) ? $plugin_file : null );
             if ( $found ) return $found;
@@ -266,7 +266,7 @@ function tk_ajax_activate_license() {
     if ( ! current_user_can( 'manage_options' ) ) wp_die( 'Forbidden' );
 
     $key = sanitize_text_field( wp_unslash( $_POST['license_key'] ?? '' ) );
-    if ( ! $key ) wp_send_json_error( [ 'message' => __( 'Please enter a license key.', 'trailkit' ) ] );
+    if ( ! $key ) wp_send_json_error( [ 'message' => __( 'Please enter a license key.', 'trailplugin' ) ] );
 
     $res = wp_remote_post( TK_API_URL . '/api/licenses/validate', [
         'body'    => wp_json_encode( [
@@ -280,13 +280,13 @@ function tk_ajax_activate_license() {
     ] );
 
     if ( is_wp_error( $res ) ) {
-        wp_send_json_error( [ 'message' => __( 'Could not reach the license server. Check your internet connection.', 'trailkit' ) ] );
+        wp_send_json_error( [ 'message' => __( 'Could not reach the license server. Check your internet connection.', 'trailplugin' ) ] );
     }
 
     $body = json_decode( wp_remote_retrieve_body( $res ), true );
 
     if ( empty( $body['valid'] ) ) {
-        wp_send_json_error( [ 'message' => $body['message'] ?? __( 'Invalid license key.', 'trailkit' ) ] );
+        wp_send_json_error( [ 'message' => $body['message'] ?? __( 'Invalid license key.', 'trailplugin' ) ] );
     }
 
     update_option( 'tk_license_key',     $key );
@@ -295,7 +295,7 @@ function tk_ajax_activate_license() {
     set_transient( 'tk_pro_status', 'active', WEEK_IN_SECONDS );
 
     wp_send_json_success( [
-        'message' => __( 'License activated successfully! Pro features are now unlocked.', 'trailkit' ),
+        'message' => __( 'License activated successfully! Pro features are now unlocked.', 'trailplugin' ),
         'expires' => $body['expires_at'] ?? '',
         'plan'    => $body['plan'] ?? 'pro',
     ] );
@@ -308,7 +308,7 @@ function tk_ajax_start_trial() {
     if ( ! current_user_can( 'manage_options' ) ) wp_die( 'Forbidden' );
 
     $email = sanitize_email( wp_unslash( $_POST['email'] ?? '' ) );
-    if ( ! is_email( $email ) ) wp_send_json_error( [ 'message' => __( 'Please enter a valid email address.', 'trailkit' ) ] );
+    if ( ! is_email( $email ) ) wp_send_json_error( [ 'message' => __( 'Please enter a valid email address.', 'trailplugin' ) ] );
 
     $res = wp_remote_post( TK_API_URL . '/api/trials/start', [
         'body'    => wp_json_encode( [
@@ -321,14 +321,14 @@ function tk_ajax_start_trial() {
     ] );
 
     if ( is_wp_error( $res ) ) {
-        wp_send_json_error( [ 'message' => __( 'Could not reach the license server.', 'trailkit' ) ] );
+        wp_send_json_error( [ 'message' => __( 'Could not reach the license server.', 'trailplugin' ) ] );
     }
 
     $body = json_decode( wp_remote_retrieve_body( $res ), true );
     $code = (int) wp_remote_retrieve_response_code( $res );
 
     if ( $code !== 201 ) {
-        wp_send_json_error( [ 'message' => $body['error'] ?? __( 'Could not start trial.', 'trailkit' ) ] );
+        wp_send_json_error( [ 'message' => $body['error'] ?? __( 'Could not start trial.', 'trailplugin' ) ] );
     }
 
     // Auto-activate the trial key
@@ -339,7 +339,7 @@ function tk_ajax_start_trial() {
     set_transient( 'tk_pro_status', 'active', WEEK_IN_SECONDS );
 
     wp_send_json_success( [
-        'message' => __( 'Trial activated! Check your email for the key. Pro features are now unlocked.', 'trailkit' ),
+        'message' => __( 'Trial activated! Check your email for the key. Pro features are now unlocked.', 'trailplugin' ),
         'key'     => $key,
     ] );
 }
@@ -355,7 +355,7 @@ function tk_ajax_deactivate_license() {
     delete_option( 'tk_license_expires' );
     delete_transient( 'tk_pro_status' );
 
-    wp_send_json_success( [ 'message' => __( 'License removed.', 'trailkit' ) ] );
+    wp_send_json_success( [ 'message' => __( 'License removed.', 'trailplugin' ) ] );
 }
 
 /* ── Lite limit admin notice ──────────────────────── */
@@ -369,12 +369,12 @@ function tk_over_limit_notice() {
 
     printf(
         '<div class="notice notice-error is-dismissible"><p><strong>%s</strong> %s</p></div>',
-        esc_html__( 'TrailKit Lite limit reached.', 'trailkit' ),
+        esc_html__( 'TrailKit Lite limit reached.', 'trailplugin' ),
         sprintf(
             /* translators: %1$d = limit, %2$s = upgrade link */
-            esc_html__( 'You have reached the %1$d item limit. The item was saved as a Draft. %2$s', 'trailkit' ),
+            esc_html__( 'You have reached the %1$d item limit. The item was saved as a Draft. %2$s', 'trailplugin' ),
             intval( $info['limit'] ),
-            '<a href="https://trailplugin.com" target="_blank">' . esc_html__( 'Upgrade to Pro →', 'trailkit' ) . '</a>'
+            '<a href="https://trailplugin.com" target="_blank">' . esc_html__( 'Upgrade to Pro →', 'trailplugin' ) . '</a>'
         )
     );
 }

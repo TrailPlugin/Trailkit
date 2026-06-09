@@ -27,10 +27,10 @@ class TK_Guide_Fields {
 
     /* ── Native meta boxes ──────────────────────── */
     public static function register_meta_boxes() {
-        add_meta_box( 'tk-guide-contact',     __( 'Contact Info',   'trailkit' ), [ self::class, 'box_contact'     ], 'tk_guide', 'normal', 'high' );
-        add_meta_box( 'tk-guide-specialties', __( 'Specialties',    'trailkit' ), [ self::class, 'box_specialties' ], 'tk_guide', 'normal' );
-        add_meta_box( 'tk-guide-location',    __( 'Service Area',   'trailkit' ), [ self::class, 'box_location'    ], 'tk_guide', 'normal' );
-        add_meta_box( 'tk-guide-photo',       __( 'Profile Photo',  'trailkit' ), [ self::class, 'box_photo'       ], 'tk_guide', 'side' );
+        add_meta_box( 'tk-guide-contact',     __( 'Contact Info',   'trailplugin' ), [ self::class, 'box_contact'     ], 'tk_guide', 'normal', 'high' );
+        add_meta_box( 'tk-guide-specialties', __( 'Specialties',    'trailplugin' ), [ self::class, 'box_specialties' ], 'tk_guide', 'normal' );
+        add_meta_box( 'tk-guide-location',    __( 'Service Area',   'trailplugin' ), [ self::class, 'box_location'    ], 'tk_guide', 'normal' );
+        add_meta_box( 'tk-guide-photo',       __( 'Profile Photo',  'trailplugin' ), [ self::class, 'box_photo'       ], 'tk_guide', 'side' );
     }
 
     public static function box_contact( $post ) {
@@ -39,21 +39,21 @@ class TK_Guide_Fields {
         ?>
         <table class="tk-meta-table">
             <tr>
-                <td><label><?php _e('WhatsApp','trailkit') ?></label>
+                <td><label><?php _e('WhatsApp','trailplugin') ?></label>
                 <input type="text" name="_tk_whatsapp" value="<?php echo esc_attr($d['whatsapp']) ?>" placeholder="+1 555 000 0000"></td>
-                <td><label><?php _e('Email','trailkit') ?></label>
+                <td><label><?php _e('Email','trailplugin') ?></label>
                 <input type="email" name="_tk_email" value="<?php echo esc_attr($d['email']) ?>"></td>
             </tr>
             <tr>
-                <td><label><?php _e('Instagram handle','trailkit') ?></label>
+                <td><label><?php _e('Instagram handle','trailplugin') ?></label>
                 <input type="text" name="_tk_instagram" value="<?php echo esc_attr($d['instagram']) ?>" placeholder="handle (no @)"></td>
-                <td><label><?php _e('Price from (USD/day)','trailkit') ?></label>
+                <td><label><?php _e('Price from (USD/day)','trailplugin') ?></label>
                 <input type="number" name="_tk_price_from" value="<?php echo esc_attr($d['price_from']) ?>" min="0" step="1"></td>
             </tr>
             <tr>
                 <td colspan="2">
                     <label><input type="checkbox" name="_tk_is_featured" value="1" <?php checked($d['is_featured'], '1') ?>>
-                    <?php _e('Featured guide (shown first in directory)','trailkit') ?></label>
+                    <?php _e('Featured guide (shown first in directory)','trailplugin') ?></label>
                 </td>
             </tr>
         </table>
@@ -76,14 +76,14 @@ class TK_Guide_Fields {
     public static function box_location( $post ) {
         $d = self::get( $post->ID );
         ?>
-        <p class="description"><?php _e('Center of your service area. Used for the guides map directory.','trailkit') ?></p>
+        <p class="description"><?php _e('Center of your service area. Used for the guides map directory.','trailplugin') ?></p>
         <table class="tk-meta-table">
             <tr>
-                <td><label><?php _e('Latitude','trailkit') ?></label>
+                <td><label><?php _e('Latitude','trailplugin') ?></label>
                 <input type="text" name="_tk_lat" value="<?php echo esc_attr($d['lat']) ?>"></td>
-                <td><label><?php _e('Longitude','trailkit') ?></label>
+                <td><label><?php _e('Longitude','trailplugin') ?></label>
                 <input type="text" name="_tk_lng" value="<?php echo esc_attr($d['lng']) ?>"></td>
-                <td><label><?php _e('Radius (km)','trailkit') ?></label>
+                <td><label><?php _e('Radius (km)','trailplugin') ?></label>
                 <input type="number" name="_tk_radius_km" value="<?php echo esc_attr($d['radius_km']) ?>" min="1" placeholder="50"></td>
             </tr>
         </table>
@@ -102,9 +102,9 @@ class TK_Guide_Fields {
             <?php endif; ?>
         </div>
         <input type="hidden" name="_tk_photo_id" id="tk_photo_id_field" value="<?php echo esc_attr($photo_id) ?>">
-        <button type="button" class="button tk-photo-btn" data-target="tk_photo_id_field" data-preview="tk-guide-photo-preview"><?php _e('Select Photo','trailkit') ?></button>
+        <button type="button" class="button tk-photo-btn" data-target="tk_photo_id_field" data-preview="tk-guide-photo-preview"><?php _e('Select Photo','trailplugin') ?></button>
         <?php if ( $photo_id ): ?>
-        <button type="button" class="button tk-photo-remove" data-target="tk_photo_id_field" data-preview="tk-guide-photo-preview" style="margin-left:4px"><?php _e('Remove','trailkit') ?></button>
+        <button type="button" class="button tk-photo-remove" data-target="tk_photo_id_field" data-preview="tk-guide-photo-preview" style="margin-left:4px"><?php _e('Remove','trailplugin') ?></button>
         <?php endif; ?>
         <?php
     }
@@ -151,7 +151,7 @@ class TK_Guide_Fields {
         if ( ! $screen || $screen->post_type !== 'tk_guide' ) return;
         if ( ! tk_at_limit( 'tk_guide' ) ) return;
         echo '<div class="notice notice-warning"><p>'
-           . __( '<strong>TrailKit Lite:</strong> You have reached the 1 guide limit. <a href="#">Upgrade to Pro</a> for unlimited guides.', 'trailkit' )
+           . __( '<strong>TrailKit Lite:</strong> You have reached the 1 guide limit. <a href="#">Upgrade to Pro</a> for unlimited guides.', 'trailplugin' )
            . '</p></div>';
     }
 }
