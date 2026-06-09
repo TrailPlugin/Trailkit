@@ -1,0 +1,26 @@
+# WordPress
+*.log
+.DS_Store
+Thumbs.db
+
+# Node (if build tools added later)
+node_modules/
+dist/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# OS
+desktop.ini
+
+# Composer (if added later)
+vendor/
+composer.lock
+
+# Internal
+CLAUDE.md
+TODO-plugin.md
+build/
+build-zip.ps1

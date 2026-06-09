@@ -1,0 +1,92 @@
+=== TrailKit — Adventure Routes, POIs & Guides ===
+Contributors: gabrielarias
+Tags: routes, hiking, trails, points of interest, guides, maps, adventure, outdoor, tourism
+Requires at least: 6.0
+Tested up to: 6.7
+Requires PHP: 7.4
+Stable tag: 1.0.0
+License: GPLv2 or later
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
+
+Add adventure routes, points of interest, and guide profiles to any WordPress site. Works with any theme, no dependencies.
+
+== Description ==
+
+TrailKit gives you three powerful Custom Post Types to build outdoor and adventure tourism websites:
+
+* **Routes** — with difficulty, distance, elevation, GPS waypoints, and gallery
+* **Points of Interest** — with coordinates, photo gallery, and conditions alerts
+* **Guides** — with contact info, specialties, service area, and profile photo
+
+**Works with any theme.** No plugin dependencies. All data is stored in standard WordPress postmeta using native meta boxes.
+
+= Key Features =
+
+* 3 Custom Post Types: Routes, Points of Interest, Guides
+* Shared taxonomies: Activity, Region + POI Type
+* Native meta boxes (no plugin dependencies)
+* Shortcodes: `[tk_routes]`, `[tk_pois]`, `[tk_guides]`, `[tk_map]`
+* Interactive Leaflet map with AJAX-loaded markers
+* Template override system (like WooCommerce)
+* Dark mode ready CSS variables
+* Translation ready
+
+= Shortcode Examples =
+
+`[tk_routes activity="hiking" difficulty="moderate" limit="6" columns="3"]`
+`[tk_pois type="waterfall" region="andes" limit="9"]`
+`[tk_guides featured="true" specialty="climbing"]`
+`[tk_map type="routes" height="450px" lat="10.48" lng="-66.90" zoom="8"]`
+
+= Upgrade to Pro =
+
+[TrailKit Pro](https://trailplugin.com) removes the 3-item limit and unlocks:
+GPS polyline maps, elevation profiles, GPX import, gallery lightbox slider, and priority support.
+
+Get a license or start a free 14-day trial at [trailplugin.com](https://trailplugin.com).
+
+== External Services ==
+
+TrailKit uses the following external services:
+
+**Leaflet (maps)**
+Leaflet JavaScript library and map tiles are loaded from `unpkg.com` and `tile.openstreetmap.org` only on pages that display a map. No user data is sent to these services.
+- [Leaflet Terms](https://leafletjs.com/)
+- [OpenStreetMap Terms](https://www.openstreetmap.org/copyright)
+
+**TrailKit License Server (Pro licenses only)**
+When you activate a Pro license key, the plugin contacts the TrailKit license server at `trailplugin.com` to validate your key. Your site domain, WordPress version, and plugin version are transmitted. This only happens when you enter a license key in Settings — Lite users are not affected.
+- [TrailKit Privacy Policy](https://trailplugin.com/privacy)
+
+== Installation ==
+
+1. Upload the plugin files to `/wp-content/plugins/trailkit/`
+2. Activate the plugin through the 'Plugins' screen in WordPress
+3. Go to Routes → Settings to configure slugs and map defaults
+4. Add `[tk_routes]` to any page to display your routes
+5. Go to Settings → Permalinks and click Save to register the custom URLs
+
+== Frequently Asked Questions ==
+
+= Do I need any other plugins? =
+No. TrailKit works entirely with native WordPress meta boxes. There are no required dependencies — just install and activate.
+
+= Can I customize the card templates? =
+Yes. Copy any file from `wp-content/plugins/trailkit/templates/` to `wp-content/themes/your-theme/trailkit/` and edit it freely.
+
+= What is the Lite limit? =
+3 routes, 3 POIs, and 1 guide. [Upgrade to Pro](https://trailplugin.com) for unlimited content.
+
+= After activating I get 404 errors on route pages. =
+Go to Settings → Permalinks and click Save. This re-registers the custom post type rewrite rules. Always do this after activating or deactivating TrailKit.
+
+= The map is blank or not loading. =
+The map tiles are loaded from OpenStreetMap. Check that your server allows outgoing connections to `unpkg.com` and `tile.openstreetmap.org`.
+
+= How do I get Pro? =
+Visit [trailplugin.com](https://trailplugin.com) to purchase a license or start a free 14-day trial. After purchase, enter your key in Routes → Settings → Pro License.
+
+== Changelog ==
+
+= 1.0.0 =
+* Initial release

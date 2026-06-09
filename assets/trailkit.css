@@ -1,0 +1,834 @@
+/* TrailKit — Frontend Styles
+   All classes scoped to .tk-* — zero theme conflicts
+   ================================================== */
+
+/*
+ * TrailKit CSS Custom Properties
+ * ─────────────────────────────────────────────────────
+ * Surface tokens automatically pull from your theme's
+ * theme.json palette when available (WP 5.8+):
+ *   --wp--preset--color--base       → --tk-bg
+ *   --wp--preset--color--base-2     → --tk-bg-card
+ *   --wp--preset--color--base-3     → --tk-border
+ *   --wp--preset--color--contrast   → --tk-text
+ *   --wp--preset--color--contrast-2 → --tk-text-muted
+ *   --wp--preset--color--contrast-3 → --tk-text-faint
+ *   --wp--preset--font-family--body → --tk-font
+ *
+ * Dark mode is automatic via prefers-color-scheme.
+ *
+ * To override any token in your theme stylesheet:
+ *   .tk-card, .tk-single, .tk-grid {
+ *     --tk-primary: var(--your-brand-color);
+ *     --tk-bg:      var(--your-bg-color);
+ *   }
+ *
+ * Brand tokens (TrailKit identity — rarely changed):
+ *   --tk-primary        accent color (TrailKit green)
+ *   --tk-easy/moderate/hard/extreme  difficulty colors
+ */
+
+/* ── Brand & status tokens (global — safe to override) */
+:root {
+  --tk-primary:     #0df246;
+  --tk-primary-dim: rgba(13,242,70,.12);
+  --tk-orange:      #ff6b00;
+  --tk-easy:        #22c55e;
+  --tk-moderate:    #f59e0b;
+  --tk-hard:        #ef4444;
+  --tk-extreme:     #7c3aed;
+  --tk-radius:      0.5rem;
+  --tk-radius-lg:   0.75rem;
+  --tk-radius-full: 9999px;
+  --tk-transition:  0.2s ease;
+}
+
+/* ── Surface tokens scoped to TrailKit elements ─────
+   Inherit from theme.json palette when available;
+   fall back to sensible light-mode defaults.         */
+.tk-card,
+.tk-grid,
+.tk-single,
+.tk-single__stats-wrap,
+.tk-map-wrap,
+.tk-contact-card,
+.tk-alert,
+.tk-empty {
+  --tk-bg:           var(--wp--preset--color--base,       #ffffff);
+  --tk-bg-card:      var(--wp--preset--color--base-2,     #f8fafc);
+  --tk-border:       var(--wp--preset--color--base-3,     #e2e8f0);
+  --tk-text:         var(--wp--preset--color--contrast,   #0f172a);
+  --tk-text-muted:   var(--wp--preset--color--contrast-2, #64748b);
+  --tk-text-faint:   var(--wp--preset--color--contrast-3, #94a3b8);
+  --tk-shadow:       0 2px 12px rgba(0,0,0,.08);
+  --tk-shadow-hover: 0 6px 24px rgba(0,0,0,.12);
+  --tk-font:         var(--wp--preset--font-family--body, inherit);
+}
+
+/* ── Dark mode — overrides surface tokens when OS/browser is dark.
+   Runs after the defaults above, so it always wins.             */
+@media (prefers-color-scheme: dark) {
+  .tk-card,
+  .tk-grid,
+  .tk-single,
+  .tk-single__stats-wrap,
+  .tk-map-wrap,
+  .tk-contact-card,
+  .tk-alert,
+  .tk-empty {
+    --tk-bg:           #0a0a0a;
+    --tk-bg-card:      #1a1a1a;
+    --tk-border:       rgba(255,255,255,.1);
+    --tk-text:         #f1f5f9;
+    --tk-text-muted:   #94a3b8;
+    --tk-text-faint:   #475569;
+    --tk-shadow:       0 2px 12px rgba(0,0,0,.4);
+    --tk-shadow-hover: 0 6px 24px rgba(0,0,0,.5);
+  }
+}
+
+/* ── Grid ──────────────────────────────────────────── */
+.tk-grid {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: 1fr;
+}
+@media (min-width: 640px) {
+  .tk-grid--2col,
+  .tk-grid--3col { grid-template-columns: repeat(2, 1fr); }
+}
+@media (min-width: 1024px) {
+  .tk-grid--3col { grid-template-columns: repeat(3, 1fr); }
+  .tk-grid--4col { grid-template-columns: repeat(4, 1fr); }
+}
+
+/* ── Card base ─────────────────────────────────────── */
+.tk-card {
+  background: var(--tk-bg-card);
+  border: 1px solid var(--tk-border);
+  border-radius: var(--tk-radius-lg);
+  overflow: hidden;
+  position: relative;
+  padding: 10px 15px;
+  display: flex;
+  flex-direction: column;
+  font-family: var(--tk-font);
+  transition: transform var(--tk-transition), box-shadow var(--tk-transition), border-color var(--tk-transition);
+}
+.tk-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--tk-shadow-hover);
+  border-color: var(--tk-primary);
+}
+.tk-card__link {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+/* ── Card image ────────────────────────────────────── */
+.tk-card__image {
+  height: 200px;
+  overflow: hidden;
+  position: relative;
+  background: var(--tk-border);
+}
+.tk-card__image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s ease;
+}
+.tk-card:hover .tk-card__image img {
+  transform: scale(1.05);
+}
+.tk-card__image-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--tk-text-faint);
+}
+.tk-card__image-placeholder svg {
+  width: 40px;
+  height: 40px;
+}
+
+/* ── Card body ─────────────────────────────────────── */
+.tk-card__body {
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex: 1;
+}
+.tk-card__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+}
+.tk-card__title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--tk-text);
+  margin: 0;
+  line-height: 1.3;
+}
+.tk-card__excerpt {
+  font-size: 0.85rem;
+  color: var(--tk-text-muted);
+  line-height: 1.6;
+  margin: 0;
+  flex: 1;
+}
+
+/* ── Route stats ───────────────────────────────────── */
+.tk-card__stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  padding-top: 0.75rem;
+  margin-top: auto;
+  border-top: 1px solid var(--tk-border);
+}
+.tk-stat {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--tk-text-muted);
+}
+.tk-stat svg {
+  width: 14px;
+  height: 14px;
+  fill: var(--tk-primary);
+  flex-shrink: 0;
+}
+
+/* ── Tags ──────────────────────────────────────────── */
+.tk-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2em 0.6em;
+  background: var(--tk-primary-dim);
+  color: var(--tk-primary);
+  border-radius: var(--tk-radius-full);
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  position: relative;
+  z-index: 2;
+}
+
+/* ── Badges ────────────────────────────────────────── */
+.tk-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 0.25em 0.65em;
+  border-radius: var(--tk-radius-full);
+  font-size: 0.65rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #fff;
+  z-index: 2;
+}
+.tk-badge--easy     { background: var(--tk-easy); }
+.tk-badge--moderate { background: var(--tk-moderate); }
+.tk-badge--hard     { background: var(--tk-hard); }
+.tk-badge--extreme  { background: var(--tk-extreme); }
+.tk-badge--type     { background: rgba(0,0,0,.6); backdrop-filter: blur(4px); }
+
+/* ── POI coords ────────────────────────────────────── */
+.tk-card__coords {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.72rem;
+  color: var(--tk-text-faint);
+  font-family: monospace;
+  margin-top: auto;
+  padding-top: 0.5rem;
+}
+.tk-card__coords svg {
+  width: 12px;
+  height: 12px;
+  fill: var(--tk-primary);
+  flex-shrink: 0;
+}
+
+/* ── Guide card ────────────────────────────────────── */
+.tk-card__guide-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1.25rem 1.25rem 0;
+}
+.tk-card__avatar {
+  position: relative;
+  flex-shrink: 0;
+  width: 64px;
+  height: 64px;
+}
+.tk-card__avatar img {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--tk-border);
+}
+.tk-card__avatar-placeholder {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--tk-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--tk-text-faint);
+}
+.tk-card__avatar-placeholder svg {
+  width: 32px;
+  height: 32px;
+}
+.tk-card__featured-badge {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 18px;
+  height: 18px;
+  background: var(--tk-orange);
+  color: #fff;
+  border-radius: 50%;
+  font-size: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--tk-bg-card);
+}
+.tk-card__guide-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+.tk-card__price {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--tk-primary);
+}
+.tk-card__region {
+  font-size: 0.75rem;
+  color: var(--tk-text-faint);
+}
+.tk-card__specialties {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  padding: 0 1.25rem;
+  position: relative;
+  z-index: 2;
+}
+.tk-card--featured {
+  border-color: rgba(255,107,0,.3);
+}
+.tk-card--featured:hover {
+  border-color: var(--tk-orange);
+}
+
+/* ── Guide contact buttons ─────────────────────────── */
+.tk-card__guide-contact {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem 1.25rem;
+  position: relative;
+  z-index: 2;
+  margin-top: auto;
+}
+.tk-contact-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.4em 0.85em;
+  border-radius: var(--tk-radius-full);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: opacity var(--tk-transition), transform var(--tk-transition);
+  border: 1px solid transparent;
+}
+.tk-contact-btn:hover { opacity: 0.85; transform: translateY(-1px); }
+.tk-contact-btn svg   { width: 14px; height: 14px; flex-shrink: 0; }
+.tk-contact-btn--wa   { background: #25d366; color: #fff; }
+.tk-contact-btn--email { background: var(--tk-border); color: var(--tk-text-muted); border-color: var(--tk-border); }
+
+/* ── Map ───────────────────────────────────────────── */
+.tk-map-wrap {
+  border-radius: var(--tk-radius-lg);
+  overflow: hidden;
+  border: 1px solid var(--tk-border);
+  background: var(--tk-border);
+}
+.tk-map { width: 100%; height: 100%; }
+
+/* ── Leaflet popup override ────────────────────────── */
+.tk-popup { font-family: var(--tk-font); min-width: 160px; }
+.tk-popup img { width: 100%; height: 80px; object-fit: cover; border-radius: 4px; margin-bottom: 6px; }
+.tk-popup strong { display: block; font-size: 0.85rem; margin-bottom: 4px; }
+.tk-popup a { font-size: 0.75rem; color: #16a34a; font-weight: 700; }
+
+/* ── Empty state ───────────────────────────────────── */
+.tk-empty {
+  color: var(--tk-text-muted);
+  font-size: 0.9rem;
+  text-align: center;
+  padding: 2rem;
+}
+
+/* ── Pro lightbox ──────────────────────────────────── */
+#tk-lightbox { display: none; }
+#tk-lightbox.is-open {
+  display: flex;
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  align-items: center;
+  justify-content: center;
+}
+.tk-lb__overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,.9);
+  backdrop-filter: blur(6px);
+}
+.tk-lb__wrap {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.tk-lb__img {
+  max-width: 82vw;
+  max-height: 86vh;
+  object-fit: contain;
+  border-radius: var(--tk-radius-lg, 0.75rem);
+  box-shadow: 0 24px 64px rgba(0,0,0,.7);
+  display: block;
+}
+.tk-lb__close {
+  position: absolute;
+  top: -44px;
+  right: 0;
+  width: 34px;
+  height: 34px;
+  font-size: 0.9rem;
+}
+.tk-lb__prev,
+.tk-lb__next {
+  width: 44px;
+  height: 44px;
+  font-size: 2rem;
+  flex-shrink: 0;
+}
+.tk-lb__close,
+.tk-lb__prev,
+.tk-lb__next {
+  background: rgba(255,255,255,.12);
+  border: 1px solid rgba(255,255,255,.15);
+  color: #fff;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  transition: background var(--tk-transition, 0.2s ease);
+}
+.tk-lb__close:hover,
+.tk-lb__prev:hover,
+.tk-lb__next:hover { background: rgba(255,255,255,.25); }
+.tk-lb__counter {
+  position: absolute;
+  bottom: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: rgba(255,255,255,.5);
+  font-size: 0.78rem;
+  white-space: nowrap;
+}
+
+/* ── Lite notice (in cards) ────────────────────────── */
+.tk-lite-note {
+  font-size: 0.75rem;
+  color: var(--tk-text-faint);
+  font-style: italic;
+}
+
+/* ══════════════════════════════════════════════════
+   SINGLE PAGE TEMPLATES
+   ══════════════════════════════════════════════════ */
+
+/* ── Hero ──────────────────────────────────────────── */
+.tk-single__hero {
+  position: relative;
+  width: 100%;
+  min-height: 420px;
+  background-size: cover;
+  background-position: center center;
+  display: flex;
+  align-items: flex-end;
+}
+.tk-single__hero--guide { min-height: 280px; align-items: center; }
+.tk-single__hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(0,0,0,.15) 0%, rgba(0,0,0,.75) 100%);
+}
+.tk-single__hero-content {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem;
+}
+.tk-single__hero-content--guide { padding: 2rem 1.5rem; }
+
+.tk-single__breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.78rem;
+  color: rgba(255,255,255,.7);
+  margin-bottom: 0.75rem;
+}
+.tk-single__breadcrumb a { color: rgba(255,255,255,.7); text-decoration: none; }
+.tk-single__breadcrumb a:hover { color: #fff; }
+
+.tk-single__tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 0.75rem; }
+.tk-single__title {
+  font-size: clamp(1.75rem, 5vw, 3rem);
+  font-weight: 800;
+  color: #fff;
+  margin: 0 0 0.5rem;
+  line-height: 1.1;
+}
+.tk-single__region {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.85rem;
+  color: rgba(255,255,255,.8);
+  margin: 0;
+}
+
+/* ── Stats bar ─────────────────────────────────────── */
+.tk-single__stats-wrap {
+  background: var(--tk-bg-card);
+  border-bottom: 1px solid var(--tk-border);
+}
+.tk-single__stats {
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+.tk-single__stat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding: 1.1rem 1.5rem 1.1rem 0;
+  border-right: 1px solid var(--tk-border);
+  margin-right: 1.5rem;
+  min-width: 90px;
+}
+.tk-single__stat:last-child { border-right: none; }
+.tk-single__stat-value {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--tk-text);
+}
+.tk-single__stat-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--tk-text-faint);
+}
+
+/* Difficulty badge in stats */
+.tk-single__stat-icon {
+  display: inline-flex;
+  padding: 0.25em 0.75em;
+  border-radius: var(--tk-radius-full);
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: #fff;
+  width: fit-content;
+}
+.tk-single__stat-icon--easy     { background: var(--tk-easy); }
+.tk-single__stat-icon--moderate { background: var(--tk-moderate); color: #1a1a1a; }
+.tk-single__stat-icon--hard     { background: var(--tk-hard); }
+.tk-single__stat-icon--extreme  { background: var(--tk-extreme); }
+
+/* ── Elevation chart (Pro) ───────────────────────── */
+.tk-ele-chart-wrap {
+  background: #111;          /* always dark — matches patacaliente visual */
+  border: 1px solid #222;
+  border-radius: var(--tk-radius);
+  padding: 1.1rem 0.75rem 0.75rem;
+  margin-top: 0.75rem;
+  overflow: hidden;
+}
+#tk-ele-chart {
+  width: 100%;
+  line-height: 0;
+}
+#tk-ele-chart canvas {
+  display: block;
+  width: 100% !important;
+  border-radius: 4px;
+}
+.tk-ele-gain {
+  margin-left: auto;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--tk-primary);
+  background: var(--tk-primary-dim);
+  padding: 0.2em 0.65em;
+  border-radius: var(--tk-radius-full);
+  letter-spacing: 0.02em;
+}
+/* Section title flex so the gain badge floats right */
+.tk-single__section-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+/* ── Weather widget ──────────────────────────────── */
+.tk-weather-icon {
+  display: inline-block;
+  font-size: 1.2em;
+  line-height: 1;
+  vertical-align: middle;
+  margin-right: 0.15em;
+}
+.tk-weather-temp {
+  vertical-align: middle;
+}
+/* Pulse animation while fetching */
+.tk-weather-loading {
+  display: inline-block;
+  width: 60px;
+  height: 1em;
+  border-radius: 4px;
+  background: linear-gradient(90deg, var(--tk-border) 25%, var(--tk-bg) 50%, var(--tk-border) 75%);
+  background-size: 200% 100%;
+  animation: tk-shimmer 1.2s ease-in-out infinite;
+}
+@keyframes tk-shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ── Body ──────────────────────────────────────────── */
+.tk-single__body {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+}
+
+.tk-single__content {
+  font-size: 1rem;
+  line-height: 1.8;
+  color: var(--tk-text);
+}
+.tk-single__content p { margin-bottom: 1rem; }
+.tk-single__content h2 { font-size: 1.35rem; font-weight: 700; margin: 2rem 0 0.75rem; }
+.tk-single__content h3 { font-size: 1.1rem; font-weight: 700; margin: 1.5rem 0 0.5rem; }
+
+/* ── Section ───────────────────────────────────────── */
+.tk-single__section { margin-top: 2.5rem; }
+.tk-single__section-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--tk-text);
+  margin: 0 0 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--tk-border);
+}
+.tk-single__section-title svg { color: var(--tk-primary); flex-shrink: 0; }
+
+/* ── Alert ─────────────────────────────────────────── */
+.tk-alert {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 1rem 1.25rem;
+  background: rgba(245,158,11,.08);
+  border: 1px solid rgba(245,158,11,.3);
+  border-radius: var(--tk-radius-lg);
+  color: #92400e;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin-bottom: 1.5rem;
+}
+.tk-alert svg { color: #d97706; flex-shrink: 0; margin-top: 1px; }
+@media (prefers-color-scheme: dark) {
+  .tk-alert { color: #fcd34d; }
+  .tk-alert svg { color: #fbbf24; }
+}
+
+/* ── Gallery ───────────────────────────────────────── */
+.tk-gallery {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+}
+@media (max-width: 640px) { .tk-gallery { grid-template-columns: repeat(2, 1fr); } }
+.tk-gallery__item { display: block; border-radius: var(--tk-radius); overflow: hidden; aspect-ratio: 1; }
+.tk-gallery__item img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.3s; }
+.tk-gallery__item:hover img { transform: scale(1.05); }
+
+/* ── Buttons ───────────────────────────────────────── */
+.tk-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.6em 1.25em;
+  border-radius: var(--tk-radius-full);
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  transition: opacity 0.2s, box-shadow 0.2s, transform 0.2s;
+}
+.tk-btn--outline {
+  border: 2px solid var(--tk-border);
+  color: var(--tk-text-muted);
+  background: transparent;
+}
+.tk-btn--outline:hover { border-color: var(--tk-primary); color: var(--tk-primary); transform: translateY(-1px); }
+
+/* ── Guide single layout ───────────────────────────── */
+.tk-single__guide-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+}
+@media (min-width: 768px) {
+  .tk-single__guide-layout { grid-template-columns: 1fr 300px; align-items: start; }
+}
+
+/* Guide hero header */
+.tk-guide-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+.tk-guide-header__avatar { position: relative; flex-shrink: 0; }
+.tk-guide-header__avatar img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid rgba(255,255,255,.3);
+}
+.tk-guide-header__avatar-placeholder {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.1);
+  border: 3px solid rgba(255,255,255,.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255,255,255,.6);
+}
+.tk-guide-header__featured {
+  position: absolute;
+  bottom: 4px;
+  right: 0;
+  background: var(--tk-orange);
+  color: #fff;
+  font-size: 0.65rem;
+  font-weight: 800;
+  padding: 0.15em 0.5em;
+  border-radius: var(--tk-radius-full);
+  white-space: nowrap;
+}
+.tk-guide-header__info { flex: 1; }
+.tk-guide-header__price {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--tk-primary);
+  margin: 0.25rem 0 0;
+}
+
+/* Contact card (sidebar) */
+.tk-contact-card {
+  background: var(--tk-bg-card);
+  border: 1px solid var(--tk-border);
+  border-radius: var(--tk-radius-lg);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  position: sticky;
+  top: 80px;
+}
+.tk-contact-card__title {
+  font-size: 0.85rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--tk-text-faint);
+  margin: 0 0 0.25rem;
+}
+.tk-contact-card__btn {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.7rem 1rem;
+  border-radius: var(--tk-radius-lg);
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: opacity 0.2s, transform 0.2s;
+}
+.tk-contact-card__btn:hover { opacity: 0.85; transform: translateY(-1px); }
+.tk-contact-card__btn--wa    { background: #25d366; color: #fff; }
+.tk-contact-card__btn--email { background: var(--tk-border); color: var(--tk-text); }
+.tk-contact-card__btn--ig    { background: linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888); color: #fff; }
+.tk-contact-card__price {
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--tk-border);
+  text-align: center;
+}
+.tk-contact-card__price-label {
+  display: block;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--tk-text-faint);
+  margin-bottom: 0.25rem;
+}
+.tk-contact-card__price-value {
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: var(--tk-primary);
+}
+.tk-contact-card__price-value small { font-size: 0.8rem; font-weight: 600; color: var(--tk-text-muted); }
