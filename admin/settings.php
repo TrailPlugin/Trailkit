@@ -140,7 +140,7 @@ class TK_Settings {
                     <p style="margin:0 0 12px;color:#6b7280;font-size:0.875rem">
                         <?php printf(
                             __( 'Enter your TrailKit Pro license key to unlock unlimited content and all Pro features. <a href="%s" target="_blank">Get a license →</a>', 'trailkit' ),
-                            'https://trailkit.io/#pricing'
+                            'https://trailplugin.com'
                         ) ?>
                     </p>
                     <div style="display:flex;gap:8px;flex-wrap:wrap">
