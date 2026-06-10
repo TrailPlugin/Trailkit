@@ -50,6 +50,9 @@ function tk_run_license_checkin() {
     ] );
 
     if ( is_wp_error( $res ) ) return;
+    // Only act on a clean 200 — transient server errors (500, 502, timeouts) must
+    // not downgrade active sites; keep last known status until the next check.
+    if ( wp_remote_retrieve_response_code( $res ) !== 200 ) return;
     $body   = json_decode( wp_remote_retrieve_body( $res ), true );
     $status = ! empty( $body['valid'] ) ? 'active' : 'inactive';
     update_option( 'tk_license_status', $status );

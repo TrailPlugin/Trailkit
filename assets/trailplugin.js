@@ -57,10 +57,10 @@
         });
 
         var popup = '<div class="tk-popup">'
-          + (m.thumb ? '<img src="' + m.thumb + '" alt="">' : '')
-          + '<strong>' + m.title + '</strong>'
-          + (m.distance ? '<span>' + m.distance + ' km</span> ' : '')
-          + '<a href="' + m.url + '">' + (typeof tkStrings !== 'undefined' ? tkStrings.view : 'View →') + '</a>'
+          + (m.thumb ? '<img src="' + tkEscape(m.thumb) + '" alt="">' : '')
+          + '<strong>' + tkEscape(m.title) + '</strong>'
+          + (m.distance ? '<span>' + tkEscape(String(m.distance)) + ' km</span> ' : '')
+          + '<a href="' + tkEscape(m.url) + '">' + (typeof tkStrings !== 'undefined' ? tkStrings.view : 'View →') + '</a>'
           + '</div>';
 
         L.marker([m.lat, m.lng], { icon: icon })
@@ -70,6 +70,15 @@
     })
     .catch(function () {});
   };
+
+  function tkEscape(s) {
+    return String(s)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  }
 
   function tkDiffColor(diff) {
     var map = { easy: '#22c55e', moderate: '#f59e0b', hard: '#ef4444', extreme: '#7c3aed' };

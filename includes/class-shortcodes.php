@@ -172,29 +172,34 @@ class TK_Shortcodes {
             'lng'    => '',
         ], $atts, 'tk_map' );
 
-        $map_id  = 'tk-map-' . wp_unique_id();
+        $map_id     = 'tk-map-' . wp_unique_id();
         $center_lat = $a['lat'] ?: get_option( 'tk_default_lat', '8.0' );
         $center_lng = $a['lng'] ?: get_option( 'tk_default_lng', '-66.0' );
 
-        ob_start();
-        ?>
-        <div class="tk-map-wrap" style="height:<?php echo esc_attr($a['height']) ?>">
-            <div id="<?php echo esc_attr($map_id) ?>" class="tk-map" style="width:100%;height:100%"></div>
-        </div>
-        <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            if (typeof L === 'undefined') return;
-            tkInitMap(<?php echo json_encode([
-                'id'     => $map_id,
-                'lat'    => floatval($center_lat),
-                'lng'    => floatval($center_lng),
-                'zoom'   => intval($a['zoom']),
-                'type'   => sanitize_key($a['type']),
-                'region' => sanitize_text_field($a['region']),
-            ]) ?>);
-        });
-        </script>
-        <?php
-        return ob_get_clean();
+        // Validate height to a safe CSS dimension — prevents CSS injection via the style attribute.
+        $height = preg_match( '/^\d+(\.\d+)?(%|px|em|rem|vh|vw)$/', trim( $a['height'] ) )
+            ? $a['height']
+            : '450px';
+
+        $config = wp_json_encode( [
+            'id'     => $map_id,
+            'lat'    => floatval( $center_lat ),
+            'lng'    => floatval( $center_lng ),
+            'zoom'   => intval( $a['zoom'] ),
+            'type'   => sanitize_key( $a['type'] ),
+            'region' => sanitize_text_field( $a['region'] ),
+        ] );
+
+        // Attach the init call to the enqueued trailkit script instead of emitting
+        // an inline <script> tag. This keeps <script> out of content.rendered so the
+        // Gutenberg REST API response stays valid JSON. During REST API requests the
+        // script handle is not registered, so wp_add_inline_script silently no-ops.
+        wp_add_inline_script( 'trailkit', "if(typeof tkInitMap==='function')tkInitMap({$config});" );
+
+        return sprintf(
+            '<div class="tk-map-wrap" style="height:%s"><div id="%s" class="tk-map" style="width:100%%;height:100%%"></div></div>',
+            esc_attr( $height ),
+            esc_attr( $map_id )
+        );
     }
 }
