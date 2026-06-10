@@ -1,7 +1,7 @@
-<?php
+﻿<?php
 /**
  * Single Guide Template
- * Override: copy to {theme}/trailplugin/single-guide.php
+ * Override: copy to {theme}/trailkit/single-guide.php
  */
 if ( ! defined( 'ABSPATH' ) ) exit;
 
@@ -22,7 +22,7 @@ get_header();
         <div class="tk-single__hero-overlay" style="opacity:0.3"></div>
         <div class="tk-single__hero-content tk-single__hero-content--guide">
             <div class="tk-single__breadcrumb">
-                <a href="<?php echo esc_url( get_post_type_archive_link('tk_guide') ) ?>"><?php _e('Guides','trailplugin') ?></a>
+                <a href="<?php echo esc_url( get_post_type_archive_link('tk_guide') ) ?>"><?php esc_html_e('Guides','trailkit') ?></a>
                 <span>›</span>
                 <span><?php the_title() ?></span>
             </div>
@@ -42,7 +42,9 @@ get_header();
                 <div class="tk-guide-header__info">
                     <h1 class="tk-single__title"><?php echo esc_html( get_the_title() ) ?></h1>
                     <?php if ( $guide['price_from'] ): ?>
-                        <p class="tk-guide-header__price"><?php printf(__('From $%s / day','trailplugin'), esc_html(number_format($guide['price_from']))) ?></p>
+                        <p class="tk-guide-header__price"><?php
+                        /* translators: %s = formatted price number */
+                        printf( esc_html__( 'From $%s / day', 'trailkit' ), esc_html( number_format( $guide['price_from'] ) ) ) ?></p>
                     <?php endif; ?>
                     <?php if ( $regions && ! is_wp_error($regions) ): ?>
                         <p class="tk-single__region">
@@ -68,14 +70,14 @@ get_header();
 
             <?php /* ── Bio ── */ ?>
             <div class="tk-single__guide-main">
-                <h2 class="tk-single__section-title"><?php _e('About','trailplugin') ?></h2>
+                <h2 class="tk-single__section-title"><?php esc_html_e('About','trailkit') ?></h2>
                 <div class="tk-single__content">
                     <?php the_content() ?>
                 </div>
 
                 <?php if ( $guide['lat'] && $guide['lng'] ): ?>
                 <div class="tk-single__section" style="margin-top:2rem">
-                    <h2 class="tk-single__section-title"><?php _e('Service Area','trailplugin') ?></h2>
+                    <h2 class="tk-single__section-title"><?php esc_html_e('Service Area','trailkit') ?></h2>
                     <div id="tk-single-map" class="tk-map" style="height:320px;border-radius:12px;overflow:hidden;border:1px solid var(--tk-border)"></div>
                     <script>
                     document.addEventListener('DOMContentLoaded', function() {
@@ -96,7 +98,7 @@ get_header();
             <?php /* ── Contact sidebar ── */ ?>
             <aside class="tk-single__guide-sidebar">
                 <div class="tk-contact-card">
-                    <h3 class="tk-contact-card__title"><?php _e('Contact','trailplugin') ?></h3>
+                    <h3 class="tk-contact-card__title"><?php esc_html_e('Contact','trailkit') ?></h3>
 
                     <?php if ( $guide['whatsapp'] ): ?>
                     <a href="https://wa.me/<?php echo esc_attr(preg_replace('/\D/','', $guide['whatsapp'])) ?>" target="_blank" rel="noopener" class="tk-contact-card__btn tk-contact-card__btn--wa">
@@ -121,8 +123,8 @@ get_header();
 
                     <?php if ( $guide['price_from'] ): ?>
                     <div class="tk-contact-card__price">
-                        <span class="tk-contact-card__price-label"><?php _e('Starting from','trailplugin') ?></span>
-                        <span class="tk-contact-card__price-value">$<?php echo esc_html(number_format($guide['price_from'])) ?> <small><?php _e('/day','trailplugin') ?></small></span>
+                        <span class="tk-contact-card__price-label"><?php esc_html_e('Starting from','trailkit') ?></span>
+                        <span class="tk-contact-card__price-value">$<?php echo esc_html(number_format($guide['price_from'])) ?> <small><?php esc_html_e('/day','trailkit') ?></small></span>
                     </div>
                     <?php endif; ?>
                 </div>

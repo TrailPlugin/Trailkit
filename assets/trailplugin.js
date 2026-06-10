@@ -2,6 +2,16 @@
 (function () {
   'use strict';
 
+  /* Fix Leaflet default marker icon paths — auto-detection breaks when bundled locally */
+  if (typeof L !== 'undefined' && typeof tkData !== 'undefined') {
+    delete L.Icon.Default.prototype._getIconUrl;
+    L.Icon.Default.mergeOptions({
+      iconUrl:       tkData.pluginUrl + 'assets/images/marker-icon.png',
+      iconRetinaUrl: tkData.pluginUrl + 'assets/images/marker-icon-2x.png',
+      shadowUrl:     tkData.pluginUrl + 'assets/images/marker-shadow.png',
+    });
+  }
+
   /* ── Map initializer (called from [tk_map] shortcode) ─── */
   window.tkInitMap = function (cfg) {
     if (typeof L === 'undefined') return;

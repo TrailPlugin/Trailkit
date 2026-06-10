@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 if ( ! defined( 'ABSPATH' ) ) exit;
 
 class TK_Documentation {
@@ -16,9 +16,9 @@ class TK_Documentation {
         add_submenu_page(
             'edit.php?post_type=tk_route',
             '',
-            __( 'Documentation', 'trailplugin' ),
+            __( 'Documentation', 'trailkit' ),
             'edit_posts',
-            'trailplugin-docs',
+            'trailkit-docs',
             '__return_null'
         );
     }
@@ -31,7 +31,7 @@ class TK_Documentation {
         $parent = 'edit.php?post_type=tk_route';
         if ( ! isset( $submenu[ $parent ] ) ) return;
         foreach ( $submenu[ $parent ] as &$item ) {
-            if ( isset( $item[2] ) && $item[2] === 'trailplugin-docs' ) {
+            if ( isset( $item[2] ) && $item[2] === 'trailkit-docs' ) {
                 $item[2] = self::DOCS_URL;
                 break;
             }
@@ -40,7 +40,7 @@ class TK_Documentation {
 
     public static function styles( $hook ) {
         // No internal docs page — kept for back-compat, never fires.
-        if ( $hook !== 'trailplugin_page_trailplugin-docs' ) return;
+        if ( $hook !== 'trailkit_page_trailkit-docs' ) return;
         wp_add_inline_style( 'wp-admin', self::get_css() );
     }
 
@@ -114,20 +114,20 @@ class TK_Documentation {
             'license'    => '🔑 License & Pro',
             'faq'        => '❓ FAQ',
         ];
-        $active = sanitize_key( $_GET['tab'] ?? 'start' );
+        $active = sanitize_key( $_GET['tab'] ?? 'start' ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
         if ( ! array_key_exists( $active, $tabs ) ) $active = 'start';
         ?>
         <div class="wrap tk-docs-wrap">
             <h1>
                 <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#0df246" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17L9 7l4 6 3-4 5 8H3z"/></svg>
                 TrailKit — Documentation
-                <span class="tk-docs-version">v<?php echo TK_VERSION ?> <?php echo $is_pro ? '<span class="tk-docs-badge tk-docs-badge-pro">PRO</span>' : '<span class="tk-docs-badge tk-docs-badge-lite">LITE</span>' ?></span>
+                <span class="tk-docs-version">v<?php echo esc_html( TK_VERSION ) ?> <?php echo $is_pro ? '<span class="tk-docs-badge tk-docs-badge-pro">PRO</span>' : '<span class="tk-docs-badge tk-docs-badge-lite">LITE</span>' ?></span>
             </h1>
-            <p style="color:#666;margin:4px 0 0"><?php _e('Complete reference for TrailKit — Adventure Routes, POIs & Guides for WordPress.','trailplugin') ?></p>
+            <p style="color:#666;margin:4px 0 0"><?php esc_html_e('Complete reference for TrailKit — Adventure Routes, POIs & Guides for WordPress.','trailkit') ?></p>
 
             <div class="tk-docs-tabs">
                 <?php foreach ( $tabs as $key => $label ): ?>
-                <button class="tk-docs-tab <?php echo $key === $active ? 'active' : '' ?>" onclick="tkDocsTab('<?php echo $key ?>')" data-tab="<?php echo $key ?>">
+                <button class="tk-docs-tab <?php echo esc_attr( $key ) === $active ? 'active' : '' ?>" onclick="tkDocsTab('<?php echo esc_attr( $key ) ?>')" data-tab="<?php echo esc_attr( $key ) ?>">
                     <?php echo esc_html($label) ?>
                 </button>
                 <?php endforeach; ?>
@@ -188,7 +188,7 @@ class TK_Documentation {
             <h3 id="start-install">Installation</h3>
             <ol>
                 <li>Go to <strong>Plugins → Add New → Upload Plugin</strong></li>
-                <li>Upload <code>trailplugin.zip</code> and click <strong>Install Now</strong></li>
+                <li>Upload <code>trailkit.zip</code> and click <strong>Install Now</strong></li>
                 <li>Click <strong>Activate</strong></li>
                 <li>Go to <strong>Routes → Settings</strong> to configure URL slugs and map defaults</li>
                 <li>Go to <strong>Settings → Permalinks</strong> and click Save (required after activation)</li>
@@ -236,19 +236,19 @@ class TK_Documentation {
             <div class="tk-docs-grid">
                 <div class="tk-docs-card">
                     <h4>📝 Add Routes</h4>
-                    <p><a href="<?php echo admin_url('post-new.php?post_type=tk_route') ?>">Create a new route</a> — add title, description, hero image, difficulty, GPS, and gallery.</p>
+                    <p><a href="<?php echo esc_url( admin_url('post-new.php?post_type=tk_route') ) ?>">Create a new route</a> — add title, description, hero image, difficulty, GPS, and gallery.</p>
                 </div>
                 <div class="tk-docs-card">
                     <h4>📍 Add POIs</h4>
-                    <p><a href="<?php echo admin_url('post-new.php?post_type=tk_poi') ?>">Create a new point of interest</a> — waterfall, viewpoint, beach, or any natural landmark.</p>
+                    <p><a href="<?php echo esc_url( admin_url('post-new.php?post_type=tk_poi') ) ?>">Create a new point of interest</a> — waterfall, viewpoint, beach, or any natural landmark.</p>
                 </div>
                 <div class="tk-docs-card">
                     <h4>👤 Add Guides</h4>
-                    <p><a href="<?php echo admin_url('post-new.php?post_type=tk_guide') ?>">Create a guide profile</a> — photo, bio, contact info, specialties, and service area.</p>
+                    <p><a href="<?php echo esc_url( admin_url('post-new.php?post_type=tk_guide') ) ?>">Create a guide profile</a> — photo, bio, contact info, specialties, and service area.</p>
                 </div>
                 <div class="tk-docs-card">
                     <h4>⚙️ Settings</h4>
-                    <p><a href="<?php echo admin_url('edit.php?post_type=tk_route&page=trailplugin-settings') ?>">Configure slugs, map center, demo data, and Pro license.</a></p>
+                    <p><a href="<?php echo esc_url( admin_url('edit.php?post_type=tk_route&page=trailkit-settings') ) ?>">Configure slugs, map center, demo data, and Pro license.</a></p>
                 </div>
             </div>
         </div>
@@ -299,21 +299,21 @@ class TK_Documentation {
             <h3>Meta Fields — Gallery & Links box</h3>
             <table class="tk-docs-field-table">
                 <tr><th>Field</th><th>Meta key</th><th>Type</th><th>Notes</th></tr>
-                <tr><td>Gallery</td><td><code>_tk_gallery</code></td><td>JSON array of IDs</td><td>Max <?php echo TK_GALLERY_LIMIT ?> images in Lite <?php echo tk_is_pro() ? '' : '— unlimited in Pro' ?></td></tr>
+                <tr><td>Gallery</td><td><code>_tk_gallery</code></td><td>JSON array of IDs</td><td>Max <?php echo intval( TK_GALLERY_LIMIT ) ?> images in Lite <?php echo tk_is_pro() ? '' : '— unlimited in Pro' ?></td></tr>
             </table>
 
             <h3>Difficulty colours</h3>
             <div style="display:flex;gap:10px;flex-wrap:wrap;margin:8px 0 16px">
                 <?php foreach(['easy'=>'#22c55e','moderate'=>'#f59e0b','hard'=>'#ef4444','extreme'=>'#7c3aed'] as $d=>$c): ?>
-                <span style="background:<?php echo $c ?>;color:#fff;padding:4px 14px;border-radius:20px;font-size:12px;font-weight:700;text-transform:uppercase"><?php echo $d ?></span>
+                <span style="background:<?php echo esc_attr($c) ?>;color:#fff;padding:4px 14px;border-radius:20px;font-size:12px;font-weight:700;text-transform:uppercase"><?php echo esc_html($d) ?></span>
                 <?php endforeach; ?>
             </div>
 
             <h3>Lite limits</h3>
             <table class="tk-docs-field-table">
                 <tr><th>Resource</th><th>Lite</th><th>Pro</th></tr>
-                <tr><td>Published routes</td><td><?php echo TK_LIMIT ?></td><td>Unlimited</td></tr>
-                <tr><td>Gallery images per route</td><td><?php echo TK_GALLERY_LIMIT ?></td><td>Unlimited</td></tr>
+                <tr><td>Published routes</td><td><?php echo intval( TK_LIMIT ) ?></td><td>Unlimited</td></tr>
+                <tr><td>Gallery images per route</td><td><?php echo intval( TK_GALLERY_LIMIT ) ?></td><td>Unlimited</td></tr>
             </table>
         </div>
     <?php }
@@ -344,13 +344,13 @@ class TK_Documentation {
             <h3>Meta Fields — Gallery & Links box</h3>
             <table class="tk-docs-field-table">
                 <tr><th>Field</th><th>Meta key</th><th>Notes</th></tr>
-                <tr><td>Gallery</td><td><code>_tk_gallery</code></td><td>JSON array of attachment IDs. Max <?php echo TK_GALLERY_LIMIT ?> in Lite.</td></tr>
+                <tr><td>Gallery</td><td><code>_tk_gallery</code></td><td>JSON array of attachment IDs. Max <?php echo intval( TK_GALLERY_LIMIT ) ?> in Lite.</td></tr>
             </table>
 
             <h3>Default POI types</h3>
             <p>The following types are created automatically on plugin activation:</p>
             <code>viewpoint · waterfall · beach · village · cave · lagoon · peak · river · ruins</code>
-            <p style="margin-top:8px">Add custom types in <a href="<?php echo admin_url('edit-tags.php?taxonomy=tk_poi_type&post_type=tk_poi') ?>">POIs → POI Types</a>.</p>
+            <p style="margin-top:8px">Add custom types in <a href="<?php echo esc_url( admin_url('edit-tags.php?taxonomy=tk_poi_type&post_type=tk_poi') ) ?>">POIs → POI Types</a>.</p>
         </div>
     <?php }
 
@@ -489,11 +489,11 @@ class TK_Documentation {
             <p>TrailKit uses a WooCommerce-style template override system. Copy any template to your theme and edit it freely — plugin updates will never overwrite your customisations.</p>
 
             <h3>How it works</h3>
-            <p>Create a <code>trailplugin/</code> folder inside your active theme directory, then copy the template file there:</p>
+            <p>Create a <code>trailkit/</code> folder inside your active theme directory, then copy the template file there:</p>
             <pre><code>wp-content/
   themes/
     your-theme/
-      trailplugin/           ← create this folder
+      trailkit/              ← create this folder
         single-route.php  ← your override
         route-card.php    ← another override
         ...</code></pre>
@@ -624,7 +624,7 @@ if ( tk_is_pro() ) {
             <p>To fully replace TrailKit CSS with your own:</p>
             <pre><code>// In your theme's functions.php
 add_action('wp_enqueue_scripts', function() {
-    wp_dequeue_style('trailplugin');
+    wp_dequeue_style('trailkit');
 }, 20);
 
 // Then add your own CSS file that targets .tk-* classes</code></pre>
@@ -641,17 +641,17 @@ add_action('wp_enqueue_scripts', function() {
                 <p><strong>TrailKit Pro is active.</strong> You have access to all Pro features.</p>
                 <?php else: ?>
                 <span>ℹ️</span>
-                <p>You are using <strong>TrailKit Lite</strong>. <a href="<?php echo admin_url('edit.php?post_type=tk_route&page=trailplugin-settings') ?>">Activate a Pro license</a> or <a href="https://trailplugin.com" target="_blank">get one at trailplugin.com</a> to unlock all features.</p>
+                <p>You are using <strong>TrailKit Lite</strong>. <a href="<?php echo esc_url( admin_url('edit.php?post_type=tk_route&page=trailkit-settings') ) ?>">Activate a Pro license</a> or <a href="https://trailplugin.com" target="_blank">get one at trailplugin.com</a> to unlock all features.</p>
                 <?php endif; ?>
             </div>
 
             <h3>Current limits (Lite)</h3>
             <table class="tk-docs-field-table">
                 <tr><th>Content type</th><th>Lite limit</th><th>Pro</th></tr>
-                <tr><td>Routes</td><td><?php echo TK_LIMIT ?> published</td><td>Unlimited</td></tr>
-                <tr><td>Points of Interest</td><td><?php echo TK_LIMIT ?> published</td><td>Unlimited</td></tr>
+                <tr><td>Routes</td><td><?php echo intval( TK_LIMIT ) ?> published</td><td>Unlimited</td></tr>
+                <tr><td>Points of Interest</td><td><?php echo intval( TK_LIMIT ) ?> published</td><td>Unlimited</td></tr>
                 <tr><td>Guides</td><td>1 published</td><td>Unlimited</td></tr>
-                <tr><td>Gallery images per post</td><td><?php echo TK_GALLERY_LIMIT ?></td><td>Unlimited</td></tr>
+                <tr><td>Gallery images per post</td><td><?php echo intval( TK_GALLERY_LIMIT ) ?></td><td>Unlimited</td></tr>
             </table>
 
             <h3>Pro features</h3>
@@ -667,7 +667,7 @@ add_action('wp_enqueue_scripts', function() {
 
             <h3>Activating your license</h3>
             <ol>
-                <li>Go to <a href="<?php echo admin_url('edit.php?post_type=tk_route&page=trailplugin-settings') ?>"><strong>Routes → Settings → Pro License</strong></a></li>
+                <li>Go to <a href="<?php echo esc_url( admin_url('edit.php?post_type=tk_route&page=trailkit-settings') ) ?>"><strong>Routes → Settings → Pro License</strong></a></li>
                 <li>Paste your license key (format: <code>TK-XXXX-XXXX-XXXX-XXXX</code>)</li>
                 <li>Click <strong>Activate License</strong></li>
                 <li>The page reloads showing a green <strong>Active</strong> badge</li>
@@ -675,7 +675,7 @@ add_action('wp_enqueue_scripts', function() {
 
             <div class="tk-docs-callout tk-docs-callout-warn">
                 <span>⚠️</span>
-                <p><strong>License requires internet:</strong> Activation contacts the TrailKit license server (<code>trailapp-git-main-gabo5612s-projects.vercel.app</code>). If the connection fails, check your hosting firewall settings for outgoing HTTP requests.</p>
+                <p><strong>License requires internet:</strong> Activation contacts the TrailKit license server at <code>trailplugin.com</code>. If the connection fails, check your hosting firewall settings for outgoing HTTP requests.</p>
             </div>
 
             <h3>License plans</h3>
@@ -690,12 +690,12 @@ add_action('wp_enqueue_scripts', function() {
             <h3>14-Day Free Trial</h3>
             <p>Try all Pro features free for 14 days — no credit card required.</p>
             <ol>
-                <li>Go to <a href="<?php echo admin_url('edit.php?post_type=tk_route&page=trailplugin-settings') ?>">Routes → Settings → Pro License</a></li>
-                <li>Enter your email in the <strong>Start 14-Day Trial</strong> section</li>
-                <li>Click <strong>Start 14-Day Trial</strong></li>
-                <li>The trial key is emailed to you and activated automatically</li>
+                <li>Visit <a href="<?php echo esc_url( 'https://trailplugin.com/#trial' ) ?>" target="_blank" rel="noopener">trailplugin.com/#trial</a> and enter your email</li>
+                <li>You will receive a trial license key by email</li>
+                <li>Go to <a href="<?php echo esc_url( admin_url('edit.php?post_type=tk_route&page=trailkit-settings') ) ?>">Routes → Settings → Pro License</a></li>
+                <li>Paste your trial key and click <strong>Activate License</strong></li>
             </ol>
-            <p>One trial per domain. After 14 days, the site reverts to Lite unless you purchase a Pro plan.</p>
+            <p>One trial per domain. After 14 days the site reverts to Lite unless you purchase a Pro plan.</p>
 
             <h3>Removing a license (domain transfer)</h3>
             <p>To move your license to a different domain:</p>
@@ -755,7 +755,7 @@ add_action('wp_enqueue_scripts', function() {
                 ],
                 [
                     'q' => 'Can I translate TrailKit into my language?',
-                    'a' => 'Yes. TrailKit uses the text domain <code>trailplugin</code> and includes a <code>languages/trailplugin.pot</code> file. Use <a href="https://poedit.net/" target="_blank">Poedit</a> to create a <code>.po</code> and <code>.mo</code> file for your language, then upload to <code>wp-content/languages/plugins/</code>.',
+                    'a' => 'Yes. TrailKit uses the text domain <code>trailkit</code> and includes a <code>languages/trailkit.pot</code> file. Use <a href="https://poedit.net/" target="_blank">Poedit</a> to create a <code>.po</code> and <code>.mo</code> file for your language, then upload to <code>wp-content/languages/plugins/</code>.',
                     'type' => 'tip',
                 ],
                 [
@@ -772,8 +772,8 @@ add_action('wp_enqueue_scripts', function() {
                 <div style="padding:12px 16px;background:#fafafa;border-bottom:1px solid #e0e0e0;font-weight:700;font-size:13.5px;color:#1a1a1a">
                     <?php echo esc_html( $faq['q'] ) ?>
                 </div>
-                <div class="tk-docs-callout <?php echo $type_class ?>" style="border-radius:0;margin:0;border-left-width:4px">
-                    <span><?php echo $icon ?></span>
+                <div class="tk-docs-callout <?php echo esc_attr( $type_class ) ?>" style="border-radius:0;margin:0;border-left-width:4px">
+                    <span><?php echo esc_html( $icon ) ?></span>
                     <p><?php echo wp_kses_post( $faq['a'] ) ?></p>
                 </div>
             </div>

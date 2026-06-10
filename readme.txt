@@ -1,8 +1,8 @@
 === TrailKit — Adventure Routes, POIs & Guides ===
 Contributors: gabrielarias
-Tags: routes, hiking, trails, points of interest, guides, maps, adventure, outdoor, tourism
+Tags: routes, maps, hiking, outdoor, guides
 Requires at least: 6.0
-Tested up to: 6.7
+Tested up to: 7.0
 Requires PHP: 7.4
 Stable tag: 1.0.0
 License: GPLv2 or later
@@ -49,10 +49,15 @@ Get a license or start a free 14-day trial at [trailplugin.com](https://trailplu
 
 TrailKit uses the following external services:
 
-**Leaflet (maps)**
-Leaflet JavaScript library and map tiles are loaded from `unpkg.com` and `tile.openstreetmap.org` only on pages that display a map. No user data is sent to these services.
+**OpenStreetMap (map tiles)**
+When a map is displayed, tiles are loaded from `tile.openstreetmap.org`. No user data is sent. The Leaflet library itself is bundled locally with the plugin.
 - [Leaflet Terms](https://leafletjs.com/)
 - [OpenStreetMap Terms](https://www.openstreetmap.org/copyright)
+
+**Open-Meteo (weather widget — Pro only)**
+When the live weather widget is enabled on a route (Pro feature), the visitor's browser fetches weather data from `api.open-meteo.com` using the route's GPS coordinates. No personal user data is sent — only latitude and longitude. Lite users are not affected.
+- [Open-Meteo Terms](https://open-meteo.com/en/terms)
+- [Open-Meteo Privacy Policy](https://open-meteo.com/en/terms)
 
 **TrailKit License Server (Pro licenses only)**
 When you activate a Pro license key, the plugin contacts the TrailKit license server at `trailplugin.com` to validate your key. Your site domain, WordPress version, and plugin version are transmitted. This only happens when you enter a license key in Settings — Lite users are not affected.
@@ -81,7 +86,7 @@ Yes. Copy any file from `wp-content/plugins/trailplugin/templates/` to `wp-conte
 Go to Settings → Permalinks and click Save. This re-registers the custom post type rewrite rules. Always do this after activating or deactivating TrailKit.
 
 = The map is blank or not loading. =
-The map tiles are loaded from OpenStreetMap. Check that your server allows outgoing connections to `unpkg.com` and `tile.openstreetmap.org`.
+The map tiles are loaded from OpenStreetMap. Check that your server allows outgoing connections to `tile.openstreetmap.org`.
 
 = How do I get Pro? =
 Visit [trailplugin.com](https://trailplugin.com) to purchase a license or start a free 14-day trial. After purchase, enter your key in Routes → Settings → Pro License.

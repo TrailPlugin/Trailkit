@@ -1,7 +1,7 @@
-<?php
+﻿<?php
 /**
  * Template: POI Card
- * Override: place file at {your-theme}/trailplugin/poi-card.php
+ * Override: place file at {your-theme}/trailkit/poi-card.php
  */
 if ( ! defined( 'ABSPATH' ) ) exit;
 

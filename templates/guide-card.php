@@ -1,7 +1,7 @@
-<?php
+﻿<?php
 /**
  * Template: Guide Card
- * Override: place file at {your-theme}/trailplugin/guide-card.php
+ * Override: place file at {your-theme}/trailkit/guide-card.php
  */
 if ( ! defined( 'ABSPATH' ) ) exit;
 
@@ -35,13 +35,15 @@ $regions = get_the_terms( $post_id, 'tk_region' );
                 </div>
             <?php endif; ?>
             <?php if ( $guide['is_featured'] ): ?>
-                <span class="tk-card__featured-badge" title="<?php _e('Featured','trailplugin') ?>">★</span>
+                <span class="tk-card__featured-badge" title="<?php esc_attr_e( 'Featured', 'trailkit' ) ?>">★</span>
             <?php endif; ?>
         </div>
         <div class="tk-card__guide-info">
             <h3 class="tk-card__title"><?php echo esc_html($title) ?></h3>
             <?php if ( $guide['price_from'] ): ?>
-                <span class="tk-card__price"><?php printf( __('From $%s/day','trailplugin'), esc_html(number_format($guide['price_from'])) ) ?></span>
+                <span class="tk-card__price"><?php
+                /* translators: %s = formatted price number */
+                printf( esc_html__( 'From $%s/day', 'trailkit' ), esc_html( number_format( $guide['price_from'] ) ) ) ?></span>
             <?php endif; ?>
             <?php if ( $regions && ! is_wp_error($regions) ): ?>
                 <span class="tk-card__region"><?php echo esc_html( implode(', ', wp_list_pluck($regions,'name')) ) ?></span>

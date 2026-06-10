@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 if ( ! defined( 'ABSPATH' ) ) exit;
 
 class TK_Shortcodes {
@@ -56,7 +56,7 @@ class TK_Shortcodes {
             }
             echo '</div>';
         } else {
-            echo '<p class="tk-empty">' . esc_html__( 'No routes found.', 'trailplugin' ) . '</p>';
+            echo '<p class="tk-empty">' . esc_html__( 'No routes found.', 'trailkit' ) . '</p>';
         }
         wp_reset_postdata();
         return ob_get_clean();
@@ -103,7 +103,7 @@ class TK_Shortcodes {
             }
             echo '</div>';
         } else {
-            echo '<p class="tk-empty">' . esc_html__( 'No points of interest found.', 'trailplugin' ) . '</p>';
+            echo '<p class="tk-empty">' . esc_html__( 'No points of interest found.', 'trailkit' ) . '</p>';
         }
         wp_reset_postdata();
         return ob_get_clean();
@@ -154,7 +154,7 @@ class TK_Shortcodes {
             }
             echo '</div>';
         } else {
-            echo '<p class="tk-empty">' . esc_html__( 'No guides found.', 'trailplugin' ) . '</p>';
+            echo '<p class="tk-empty">' . esc_html__( 'No guides found.', 'trailkit' ) . '</p>';
         }
         wp_reset_postdata();
         return ob_get_clean();

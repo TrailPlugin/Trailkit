@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 if ( ! defined( 'ABSPATH' ) ) exit;
 
 class TK_CPT {
@@ -13,15 +13,15 @@ class TK_CPT {
     /* ── Route ──────────────────────────────────── */
     private static function register_route() {
         $labels = [
-            'name'               => __( 'Routes',           'trailplugin' ),
-            'singular_name'      => __( 'Route',            'trailplugin' ),
-            'add_new_item'       => __( 'Add New Route',    'trailplugin' ),
-            'edit_item'          => __( 'Edit Route',       'trailplugin' ),
-            'new_item'           => __( 'New Route',        'trailplugin' ),
-            'view_item'          => __( 'View Route',       'trailplugin' ),
-            'search_items'       => __( 'Search Routes',    'trailplugin' ),
-            'not_found'          => __( 'No routes found',  'trailplugin' ),
-            'menu_name'          => __( 'Routes',           'trailplugin' ),
+            'name'               => __( 'Routes',           'trailkit' ),
+            'singular_name'      => __( 'Route',            'trailkit' ),
+            'add_new_item'       => __( 'Add New Route',    'trailkit' ),
+            'edit_item'          => __( 'Edit Route',       'trailkit' ),
+            'new_item'           => __( 'New Route',        'trailkit' ),
+            'view_item'          => __( 'View Route',       'trailkit' ),
+            'search_items'       => __( 'Search Routes',    'trailkit' ),
+            'not_found'          => __( 'No routes found',  'trailkit' ),
+            'menu_name'          => __( 'Routes',           'trailkit' ),
         ];
 
         register_post_type( 'tk_route', [
@@ -39,13 +39,13 @@ class TK_CPT {
     /* ── Point of Interest ──────────────────────── */
     private static function register_poi() {
         $labels = [
-            'name'               => __( 'Points of Interest', 'trailplugin' ),
-            'singular_name'      => __( 'Point of Interest',  'trailplugin' ),
-            'add_new_item'       => __( 'Add New POI',        'trailplugin' ),
-            'edit_item'          => __( 'Edit POI',           'trailplugin' ),
-            'search_items'       => __( 'Search POIs',        'trailplugin' ),
-            'not_found'          => __( 'No POIs found',      'trailplugin' ),
-            'menu_name'          => __( 'POIs',               'trailplugin' ),
+            'name'               => __( 'Points of Interest', 'trailkit' ),
+            'singular_name'      => __( 'Point of Interest',  'trailkit' ),
+            'add_new_item'       => __( 'Add New POI',        'trailkit' ),
+            'edit_item'          => __( 'Edit POI',           'trailkit' ),
+            'search_items'       => __( 'Search POIs',        'trailkit' ),
+            'not_found'          => __( 'No POIs found',      'trailkit' ),
+            'menu_name'          => __( 'POIs',               'trailkit' ),
         ];
 
         register_post_type( 'tk_poi', [
@@ -63,13 +63,13 @@ class TK_CPT {
     /* ── Guide ──────────────────────────────────── */
     private static function register_guide() {
         $labels = [
-            'name'               => __( 'Guides',          'trailplugin' ),
-            'singular_name'      => __( 'Guide',           'trailplugin' ),
-            'add_new_item'       => __( 'Add New Guide',   'trailplugin' ),
-            'edit_item'          => __( 'Edit Guide',      'trailplugin' ),
-            'search_items'       => __( 'Search Guides',   'trailplugin' ),
-            'not_found'          => __( 'No guides found', 'trailplugin' ),
-            'menu_name'          => __( 'Guides',          'trailplugin' ),
+            'name'               => __( 'Guides',          'trailkit' ),
+            'singular_name'      => __( 'Guide',           'trailkit' ),
+            'add_new_item'       => __( 'Add New Guide',   'trailkit' ),
+            'edit_item'          => __( 'Edit Guide',      'trailkit' ),
+            'search_items'       => __( 'Search Guides',   'trailkit' ),
+            'not_found'          => __( 'No guides found', 'trailkit' ),
+            'menu_name'          => __( 'Guides',          'trailkit' ),
         ];
 
         register_post_type( 'tk_guide', [
@@ -90,8 +90,8 @@ class TK_CPT {
         // Activity type — shared across Route + POI + Guide
         register_taxonomy( 'tk_activity', [ 'tk_route', 'tk_poi', 'tk_guide' ], [
             'labels'            => [
-                'name'          => __( 'Activities', 'trailplugin' ),
-                'singular_name' => __( 'Activity',   'trailplugin' ),
+                'name'          => __( 'Activities', 'trailkit' ),
+                'singular_name' => __( 'Activity',   'trailkit' ),
             ],
             'hierarchical'  => false,
             'show_in_rest'  => true,
@@ -101,8 +101,8 @@ class TK_CPT {
         // Region — shared across all three
         register_taxonomy( 'tk_region', [ 'tk_route', 'tk_poi', 'tk_guide' ], [
             'labels'            => [
-                'name'          => __( 'Regions', 'trailplugin' ),
-                'singular_name' => __( 'Region',  'trailplugin' ),
+                'name'          => __( 'Regions', 'trailkit' ),
+                'singular_name' => __( 'Region',  'trailkit' ),
             ],
             'hierarchical'  => true,
             'show_in_rest'  => true,
@@ -112,8 +112,8 @@ class TK_CPT {
         // POI Type — only for POIs
         register_taxonomy( 'tk_poi_type', [ 'tk_poi' ], [
             'labels'            => [
-                'name'          => __( 'POI Types',  'trailplugin' ),
-                'singular_name' => __( 'POI Type',   'trailplugin' ),
+                'name'          => __( 'POI Types',  'trailkit' ),
+                'singular_name' => __( 'POI Type',   'trailkit' ),
             ],
             'hierarchical'  => true,
             'show_in_rest'  => true,

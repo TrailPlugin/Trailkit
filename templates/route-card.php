@@ -1,7 +1,7 @@
-<?php
+﻿<?php
 /**
  * Template: Route Card
- * Override: place file at {your-theme}/trailplugin/route-card.php
+ * Override: place file at {your-theme}/trailkit/route-card.php
  */
 if ( ! defined( 'ABSPATH' ) ) exit;
 
