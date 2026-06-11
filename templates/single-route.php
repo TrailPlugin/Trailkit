@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * Single Route Template
  * Override: copy to {theme}/trailkit/single-route.php

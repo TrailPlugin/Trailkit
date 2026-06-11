@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * Template: Route Card
  * Override: place file at {your-theme}/trailkit/route-card.php

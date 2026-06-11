@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 if ( ! defined( 'ABSPATH' ) ) exit;
 
 class TK_POI_Fields {
@@ -46,8 +46,8 @@ class TK_POI_Fields {
         <?php if ( TK_LITE ): ?>
         <p class="description" style="margin-bottom:6px;color:#b45309">
             <?php
-            /* translators: %1$d = max gallery images, %2$s = upgrade link (HTML anchor) */
             printf(
+                /* translators: %1$d = max gallery images, %2$s = upgrade link (HTML anchor) */
                 esc_html__( '⚠ Lite: max %1$d images. %2$s for unlimited.', 'trailkit' ),
                 intval( TK_GALLERY_LIMIT ),
                 '<a href="' . esc_url( 'https://trailplugin.com' ) . '" target="_blank" rel="noopener">' . esc_html__( 'Upgrade to Pro', 'trailkit' ) . '</a>'
@@ -86,8 +86,8 @@ class TK_POI_Fields {
         ];
 
         foreach ( $fields as $key => $fn ) {
-            if ( isset( $_POST[ $key ] ) ) {
-                update_post_meta( $post_id, $key, $fn( wp_unslash( $_POST[ $key ] ) ) );
+            if ( isset( $_POST[ $key ] ) ) { // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- sanitized via $fn callback above
+                update_post_meta( $post_id, $key, $fn( wp_unslash( $_POST[ $key ] ) ) ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
             }
         }
     }

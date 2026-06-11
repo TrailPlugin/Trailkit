@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * Plugin Name: TrailKit — Adventure Routes, POIs & Guides
  * Plugin URI:  https://trailplugin.com

@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * Single Guide Template
  * Override: copy to {theme}/trailkit/single-guide.php

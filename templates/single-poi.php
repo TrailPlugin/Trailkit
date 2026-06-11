@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * Single POI Template
  * Override: copy to {theme}/trailkit/single-poi.php

@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * Template: Guide Card
  * Override: place file at {your-theme}/trailkit/guide-card.php

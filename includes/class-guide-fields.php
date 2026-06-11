@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 if ( ! defined( 'ABSPATH' ) ) exit;
 
 class TK_Guide_Fields {
@@ -125,6 +125,7 @@ class TK_Guide_Fields {
         update_post_meta( $post_id, '_tk_is_featured', isset($_POST['_tk_is_featured']) ? '1' : '0' );
         update_post_meta( $post_id, '_tk_photo_id',   intval(            $_POST['_tk_photo_id']   ?? 0  ) );
 
+        // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- unslash+sanitize via nested array_map below
         $specs = isset( $_POST['_tk_specialties'] ) ? array_map( 'sanitize_text_field', array_map( 'wp_unslash', (array) $_POST['_tk_specialties'] ) ) : [];
         update_post_meta( $post_id, '_tk_specialties', wp_slash( json_encode( $specs ) ) );
     }

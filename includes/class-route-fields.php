@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 if ( ! defined( 'ABSPATH' ) ) exit;
 
 class TK_Route_Fields {
@@ -108,8 +108,8 @@ class TK_Route_Fields {
         <?php if ( TK_LITE ): ?>
         <p class="description" style="margin-bottom:6px;color:#b45309">
             <?php
-            /* translators: %1$d = max gallery images, %2$s = upgrade link (HTML anchor) */
             printf(
+                /* translators: %1$d = max gallery images, %2$s = upgrade link (HTML anchor) */
                 esc_html__( '⚠ Lite: max %1$d images. %2$s for unlimited.', 'trailkit' ),
                 intval( TK_GALLERY_LIMIT ),
                 '<a href="' . esc_url( 'https://trailplugin.com' ) . '" target="_blank" rel="noopener">' . esc_html__( 'Upgrade to Pro', 'trailkit' ) . '</a>'
@@ -153,17 +153,17 @@ class TK_Route_Fields {
         ];
 
         foreach ( $fields as $key => $fn ) {
-            if ( isset( $_POST[ $key ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification
-                update_post_meta( $post_id, $key, $fn( wp_unslash( $_POST[ $key ] ) ) );
+            if ( isset( $_POST[ $key ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+                update_post_meta( $post_id, $key, $fn( wp_unslash( $_POST[ $key ] ) ) ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
             }
         }
 
         // Weather toggle — checkbox (absent when unchecked)
         update_post_meta( $post_id, '_tk_weather_enabled', isset( $_POST['_tk_weather_enabled'] ) && ! TK_LITE ? '1' : '' );
 
-        // GPS points — JSON string (client-side GPX parser writes this textarea)
+        // GPS points — JSON string from client-side GPX parser; json_decode/encode round-trip validates structure.
         if ( isset( $_POST['_tk_points'] ) ) {
-            $raw    = wp_unslash( $_POST['_tk_points'] );
+            $raw    = wp_unslash( $_POST['_tk_points'] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
             $parsed = json_decode( $raw, true );
             update_post_meta( $post_id, '_tk_points', $parsed !== null ? wp_slash( json_encode( $parsed ) ) : '' );
         }
