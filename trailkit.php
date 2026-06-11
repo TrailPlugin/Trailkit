@@ -126,12 +126,51 @@ function tk_enqueue() {
     wp_enqueue_style(  'trailkit',  TK_URL . 'assets/trailplugin.css', [ 'leaflet' ], TK_VERSION );
     wp_enqueue_script( 'trailkit',  TK_URL . 'assets/trailplugin.js',  [ 'leaflet' ], TK_VERSION, true );
 
+    if ( ! TK_LITE ) {
+        tk_output_color_css();
+    }
+
     wp_localize_script( 'trailkit', 'tkData', [
         'ajaxurl'   => admin_url( 'admin-ajax.php' ),
         'nonce'     => wp_create_nonce( 'tk_nonce' ),
         'lite'      => TK_LITE,
         'pluginUrl' => TK_URL,
     ] );
+}
+
+function tk_output_color_css() {
+    $primary    = get_option( 'tk_color_primary',    '' );
+    $bg_card    = get_option( 'tk_color_bg_card',    '' );
+    $text       = get_option( 'tk_color_text',       '' );
+    $text_muted = get_option( 'tk_color_text_muted', '' );
+    $border     = get_option( 'tk_color_border',     '' );
+
+    if ( ! $primary && ! $bg_card && ! $text && ! $text_muted && ! $border ) return;
+
+    $css = '';
+
+    if ( $primary ) {
+        $hex = ltrim( $primary, '#' );
+        if ( strlen( $hex ) === 6 ) {
+            $r = hexdec( substr( $hex, 0, 2 ) );
+            $g = hexdec( substr( $hex, 2, 2 ) );
+            $b = hexdec( substr( $hex, 4, 2 ) );
+            $css .= ':root{--tk-primary:' . $primary . ';--tk-primary-dim:rgba(' . $r . ',' . $g . ',' . $b . ',.12);}';
+        }
+    }
+
+    $scoped = '';
+    if ( $bg_card )    $scoped .= '--tk-bg-card:' . $bg_card . ';';
+    if ( $text )       $scoped .= '--tk-text:' . $text . ';';
+    if ( $text_muted ) $scoped .= '--tk-text-muted:' . $text_muted . ';';
+    if ( $border )     $scoped .= '--tk-border:' . $border . ';';
+    if ( $scoped ) {
+        $css .= '.tk-card,.tk-grid,.tk-single,.tk-single__stats-wrap,.tk-map-wrap,.tk-contact-card,.tk-alert,.tk-empty{' . $scoped . '}';
+    }
+
+    if ( $css ) {
+        wp_add_inline_style( 'trailkit', $css );
+    }
 }
 
 function tk_needs_assets() {

@@ -63,6 +63,11 @@ class TK_Settings {
         register_setting( 'trailkit', 'tk_default_lat',  [ 'sanitize_callback' => 'sanitize_text_field' ] );
         register_setting( 'trailkit', 'tk_default_lng',  [ 'sanitize_callback' => 'sanitize_text_field' ] );
         register_setting( 'trailkit', 'tk_default_zoom', [ 'sanitize_callback' => 'sanitize_text_field' ] );
+        if ( ! TK_LITE ) {
+            foreach ( [ 'tk_color_primary', 'tk_color_bg_card', 'tk_color_text', 'tk_color_text_muted', 'tk_color_border' ] as $opt ) {
+                register_setting( 'trailkit', $opt, [ 'sanitize_callback' => 'sanitize_hex_color' ] );
+            }
+        }
     }
 
     public static function save() {
@@ -75,6 +80,19 @@ class TK_Settings {
                 update_option( $opt, sanitize_text_field( wp_unslash( $_POST[ $opt ] ) ) );
             }
         }
+
+        if ( ! TK_LITE ) {
+            foreach ( [ 'tk_color_primary', 'tk_color_bg_card', 'tk_color_text', 'tk_color_text_muted', 'tk_color_border' ] as $opt ) {
+                // Empty string = "use default" — delete the option so tk_output_color_css skips it
+                $val = sanitize_hex_color( wp_unslash( $_POST[ $opt ] ?? '' ) );
+                if ( $val ) {
+                    update_option( $opt, $val );
+                } else {
+                    delete_option( $opt );
+                }
+            }
+        }
+
         flush_rewrite_rules();
         wp_safe_redirect( add_query_arg( 'saved', '1', wp_get_referer() ) );
         exit;
@@ -231,6 +249,70 @@ class TK_Settings {
                         <td><input type="number" name="tk_default_zoom" value="<?php echo esc_attr( get_option( 'tk_default_zoom', '7' ) ) ?>" class="small-text" min="1" max="18"></td>
                     </tr>
                 </table>
+
+                <?php /* ── Design & Colors (Pro) ─────────────────── */ ?>
+                <?php if ( ! TK_LITE ) : ?>
+                <h2><?php esc_html_e( 'Design &amp; Colors', 'trailkit' ) ?></h2>
+                <p class="description">
+                    <?php esc_html_e( 'Override the default TrailKit color palette. Clear a field to revert to the built-in default.', 'trailkit' ) ?>
+                </p>
+                <table class="form-table">
+                    <tr>
+                        <th><label for="tk_color_primary"><?php esc_html_e( 'Accent color', 'trailkit' ) ?></label></th>
+                        <td>
+                            <input type="color" name="tk_color_primary" id="tk_color_primary"
+                                   value="<?php echo esc_attr( get_option( 'tk_color_primary', '#0df246' ) ) ?>">
+                            <p class="description"><?php esc_html_e( 'Route lines, buttons, badges, map markers. Default: #0df246', 'trailkit' ) ?></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th><label for="tk_color_bg_card"><?php esc_html_e( 'Card background', 'trailkit' ) ?></label></th>
+                        <td>
+                            <input type="color" name="tk_color_bg_card" id="tk_color_bg_card"
+                                   value="<?php echo esc_attr( get_option( 'tk_color_bg_card', '#f8fafc' ) ) ?>">
+                            <p class="description"><?php esc_html_e( 'Cards, stats bar, contact panels. Default: #f8fafc', 'trailkit' ) ?></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th><label for="tk_color_text"><?php esc_html_e( 'Text color', 'trailkit' ) ?></label></th>
+                        <td>
+                            <input type="color" name="tk_color_text" id="tk_color_text"
+                                   value="<?php echo esc_attr( get_option( 'tk_color_text', '#0f172a' ) ) ?>">
+                            <p class="description"><?php esc_html_e( 'Default: #0f172a', 'trailkit' ) ?></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th><label for="tk_color_text_muted"><?php esc_html_e( 'Muted text', 'trailkit' ) ?></label></th>
+                        <td>
+                            <input type="color" name="tk_color_text_muted" id="tk_color_text_muted"
+                                   value="<?php echo esc_attr( get_option( 'tk_color_text_muted', '#64748b' ) ) ?>">
+                            <p class="description"><?php esc_html_e( 'Stats labels, excerpts, secondary info. Default: #64748b', 'trailkit' ) ?></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th><label for="tk_color_border"><?php esc_html_e( 'Border / divider', 'trailkit' ) ?></label></th>
+                        <td>
+                            <input type="color" name="tk_color_border" id="tk_color_border"
+                                   value="<?php echo esc_attr( get_option( 'tk_color_border', '#e2e8f0' ) ) ?>">
+                            <p class="description"><?php esc_html_e( 'Default: #e2e8f0', 'trailkit' ) ?></p>
+                        </td>
+                    </tr>
+                </table>
+                <?php else : ?>
+                <h2 style="display:flex;align-items:center;gap:8px;margin-top:2rem">
+                    <?php esc_html_e( 'Design &amp; Colors', 'trailkit' ) ?>
+                    <span style="background:#fef3c7;color:#92400e;font-size:0.72em;padding:2px 7px;border-radius:4px;font-weight:700"><?php esc_html_e( 'Pro', 'trailkit' ) ?></span>
+                </h2>
+                <p class="description">
+                    <?php
+                    printf(
+                        /* translators: %s = upgrade link */
+                        esc_html__( 'Customize the accent color, backgrounds, and typography. %s', 'trailkit' ),
+                        '<a href="' . esc_url( 'https://trailplugin.com' ) . '" target="_blank" rel="noopener">' . esc_html__( 'Upgrade to Pro →', 'trailkit' ) . '</a>'
+                    );
+                    ?>
+                </p>
+                <?php endif; ?>
 
                 <?php submit_button( __( 'Save Settings', 'trailkit' ) ) ?>
             </form>
