@@ -702,7 +702,7 @@
 .tk-gallery__item img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.3s; }
 .tk-gallery__item:hover img { transform: scale(1.05); }
 
-/* ── Navigation buttons (Pro — Google Maps / Waze) ── */
+/* ── Navigation buttons (Pro — Google Maps) ── */
 .tk-maps-nav-wrap {
   display: flex;
   flex-wrap: wrap;
@@ -727,7 +727,6 @@
 .tk-maps-nav-btn:hover { opacity: 0.85; transform: translateY(-1px); }
 .tk-maps-nav-btn svg  { flex-shrink: 0; }
 .tk-maps-nav-btn--gmaps { background: #1a73e8; color: #fff; }
-.tk-maps-nav-btn--waze  { background: #33ccff; color: #1a1a1a; }
 
 /* Fixed bottom navigation bar (mobile only) */
 .tk-maps-mobile-bar { display: none; }
@@ -768,7 +767,6 @@
 .tk-maps-mobile-bar__btn:hover { opacity: 0.85; }
 .tk-maps-mobile-bar__btn svg  { flex-shrink: 0; }
 .tk-maps-mobile-bar__btn--gmaps { background: #1a73e8; color: #fff; }
-.tk-maps-mobile-bar__btn--waze  { background: #33ccff; color: #1a1a1a; }
 
 /* ── Buttons ───────────────────────────────────────── */
 .tk-btn {

@@ -12,7 +12,6 @@ $thumb   = get_the_post_thumbnail_url( $post_id, 'full' );
 // Navigation URLs — Pro only, auto-generated from GPS track or coordinates
 $nav_mobile_url  = '';
 $nav_desktop_url = '';
-$nav_waze_url    = '';
 if ( ! TK_LITE ) {
     if ( $data['gmaps_url'] ) {
         // Manual override takes precedence for both desktop and mobile
@@ -28,13 +27,11 @@ if ( ! TK_LITE ) {
             $nav_mobile_url  = 'https://maps.google.com/maps?daddr=' . $start_str . '+to:' . $end_str . '&directionsmode=driving';
             // Desktop: explicit origin and destination
             $nav_desktop_url = 'https://www.google.com/maps/dir/?api=1&origin=' . $start_str . '&destination=' . $end_str . '&travelmode=driving';
-            $nav_waze_url    = 'https://waze.com/ul?ll=' . floatval( $pt_start['lat'] ) . ',' . floatval( $pt_start['lng'] ) . '&navigate=yes';
         }
     } elseif ( $data['lat'] && $data['lng'] ) {
         $ll_str          = floatval( $data['lat'] ) . ',' . floatval( $data['lng'] );
         $nav_mobile_url  = 'https://www.google.com/maps/search/?api=1&query=' . $ll_str;
         $nav_desktop_url = $nav_mobile_url;
-        $nav_waze_url    = 'https://waze.com/ul?ll=' . $ll_str . '&navigate=yes';
     }
 }
 
@@ -152,20 +149,12 @@ get_header();
                 <?php esc_html_e('Map & Location','trailkit') ?>
             </h2>
             <div id="tk-single-map" class="tk-map" style="height:400px;border-radius:12px;overflow:hidden;border:1px solid var(--tk-border)"></div>
-            <?php if ( ! TK_LITE && ( $nav_desktop_url || $nav_waze_url ) ): ?>
+            <?php if ( ! TK_LITE && $nav_desktop_url ): ?>
             <div class="tk-maps-nav-wrap">
-                <?php if ( $nav_desktop_url ): ?>
                 <a href="<?php echo esc_url( $nav_desktop_url ) ?>" target="_blank" rel="noopener" class="tk-maps-nav-btn tk-maps-nav-btn--gmaps">
                     <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
                     <?php esc_html_e( 'Open in Google Maps', 'trailkit' ) ?>
                 </a>
-                <?php endif; ?>
-                <?php if ( $nav_waze_url ): ?>
-                <a href="<?php echo esc_url( $nav_waze_url ) ?>" target="_blank" rel="noopener" class="tk-maps-nav-btn tk-maps-nav-btn--waze">
-                    <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/><path d="M9.5 6.5l1 1.5H8l1.5-1.5zM15 17.5l-1-1.5h2.5L15 17.5z"/></svg>
-                    <?php esc_html_e( 'Navigate with Waze', 'trailkit' ) ?>
-                </a>
-                <?php endif; ?>
             </div>
             <?php elseif ( TK_LITE && $data['gmaps_url'] ): ?>
             <a href="<?php echo esc_url( $data['gmaps_url'] ) ?>" target="_blank" rel="noopener" class="tk-btn tk-btn--outline" style="margin-top:12px;display:inline-flex">
@@ -400,14 +389,8 @@ get_header();
 <div class="tk-maps-mobile-bar">
     <a href="<?php echo esc_url( $nav_mobile_url ) ?>" target="_blank" rel="noopener" class="tk-maps-mobile-bar__btn tk-maps-mobile-bar__btn--gmaps">
         <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
-        <?php esc_html_e( 'Google Maps', 'trailkit' ) ?>
+        <?php esc_html_e( 'Open in Google Maps', 'trailkit' ) ?>
     </a>
-    <?php if ( $nav_waze_url ): ?>
-    <a href="<?php echo esc_url( $nav_waze_url ) ?>" target="_blank" rel="noopener" class="tk-maps-mobile-bar__btn tk-maps-mobile-bar__btn--waze">
-        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M20.54 6.63C19.38 4.45 17.39 2.77 15 2.18V2h-1v.05C7.83 2.56 3 7.03 3 12.5c0 2.09.65 4.03 1.76 5.63L3 22h4.89c1.28.63 2.72 1 4.24 1C17.63 23 22 18.63 22 13.28c0-2.5-.92-4.79-2.46-6.65z"/></svg>
-        <?php esc_html_e( 'Waze', 'trailkit' ) ?>
-    </a>
-    <?php endif; ?>
 </div>
 <?php endif; ?>
 
