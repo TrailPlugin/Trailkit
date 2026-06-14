@@ -44,8 +44,6 @@ class TK_Route_Fields {
                 if (d.start) {
                     if (d.start.lat != null) document.querySelector('[name="_tk_lat"]').value = d.start.lat;
                     if (d.start.lng != null) document.querySelector('[name="_tk_lng"]').value = d.start.lng;
-                    document.querySelector('[name="_tk_gmaps_url"]').value =
-                        'https://www.google.com/maps?q=' + parseFloat(d.start.lat).toFixed(7) + ',' + parseFloat(d.start.lng).toFixed(7);
                 }
                 if (d.points && d.points.length) {
                     document.querySelector('[name="_tk_points"]').value = JSON.stringify(d.points);

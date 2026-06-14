@@ -206,7 +206,7 @@ get_header();
                                 * sin( $dLng / 2 ) ** 2;
                         $cum_km += $R * 2 * atan2( sqrt( $a ), sqrt( 1 - $a ) );
                     }
-                    if ( isset( $p['ele'] ) && $p['ele'] !== null ) {
+                    if ( isset( $p['ele'] ) && (int) $p['ele'] > 0 ) {
                         $ele_x[] = round( $cum_km, 3 );
                         $ele_y[] = (int) $p['ele'];
                     }
@@ -219,6 +219,19 @@ get_header();
         for ( $i = 1; $i < count( $ele_y ); $i++ ) {
             $diff = $ele_y[ $i ] - $ele_y[ $i - 1 ];
             if ( $diff > 0 ) $ele_gain += $diff;
+        }
+        // Downsample to 200 pts max so the canvas renders correctly on long routes
+        $max_chart = 200;
+        $n_pts = count( $ele_x );
+        if ( $n_pts > $max_chart ) {
+            $sx = []; $sy = [];
+            for ( $i = 0; $i < $max_chart; $i++ ) {
+                $idx  = (int) round( $i * ( $n_pts - 1 ) / ( $max_chart - 1 ) );
+                $sx[] = $ele_x[ $idx ];
+                $sy[] = $ele_y[ $idx ];
+            }
+            $ele_x = $sx;
+            $ele_y = $sy;
         }
         if ( count( $ele_x ) > 1 ):
         ?>
@@ -251,8 +264,8 @@ get_header();
                 var ctx = canvas.getContext('2d');
 
                 var minX = xArr[0], maxX = xArr[xArr.length - 1];
-                var minY = Math.min.apply(null, yArr), maxY = Math.max.apply(null, yArr);
-                var rangeY = maxY - minY || 1;
+                var minY = 0, maxY = yArr.reduce(function(a,b){return a>b?a:b;});
+                var rangeY = maxY || 1;
 
                 function pt(x, y) {
                     return {
@@ -284,31 +297,25 @@ get_header();
 
                 var pts = xArr.map(function (x, i) { return pt(x, yArr[i]); });
 
-                function smoothPathFraction(fraction) {
-                    var count = Math.max(2, Math.round(pts.length * fraction));
-                    var sl    = pts.slice(0, count);
-                    ctx.moveTo(sl[0].x, sl[0].y);
-                    for (var i = 0; i < sl.length - 1; i++) {
-                        var mx = (sl[i].x + sl[i + 1].x) / 2;
-                        var my = (sl[i].y + sl[i + 1].y) / 2;
-                        ctx.quadraticCurveTo(sl[i].x, sl[i].y, mx, my);
-                    }
-                    ctx.lineTo(sl[sl.length - 1].x, sl[sl.length - 1].y);
-                    return sl[sl.length - 1];
-                }
-
                 function drawFrame(fraction) {
                     ctx.clearRect(0, 0, W, H);
                     drawGrid();
-                    var p0    = pts[0];
                     var count = Math.max(2, Math.round(pts.length * fraction));
-                    var pL    = pts[count - 1];
+                    var sl    = pts.slice(0, count);
+                    var p0    = sl[0];
+                    var pL    = sl[sl.length - 1];
+                    var i, mx, my;
 
-                    // Fill
+                    // Fill — continuous path, no moveTo breakpoints
                     ctx.beginPath();
                     ctx.moveTo(p0.x, H - PAD);
                     ctx.lineTo(p0.x, p0.y);
-                    smoothPathFraction(fraction);
+                    for (i = 0; i < sl.length - 1; i++) {
+                        mx = (sl[i].x + sl[i + 1].x) / 2;
+                        my = (sl[i].y + sl[i + 1].y) / 2;
+                        ctx.quadraticCurveTo(sl[i].x, sl[i].y, mx, my);
+                    }
+                    ctx.lineTo(pL.x, pL.y);
                     ctx.lineTo(pL.x, H - PAD);
                     ctx.closePath();
                     ctx.fillStyle = 'rgba(13,242,70,0.12)';
@@ -316,7 +323,13 @@ get_header();
 
                     // Line
                     ctx.beginPath();
-                    smoothPathFraction(fraction);
+                    ctx.moveTo(p0.x, p0.y);
+                    for (i = 0; i < sl.length - 1; i++) {
+                        mx = (sl[i].x + sl[i + 1].x) / 2;
+                        my = (sl[i].y + sl[i + 1].y) / 2;
+                        ctx.quadraticCurveTo(sl[i].x, sl[i].y, mx, my);
+                    }
+                    ctx.lineTo(pL.x, pL.y);
                     ctx.strokeStyle = '#0df246'; ctx.lineWidth = 2; ctx.stroke();
 
                     // Tip dot
