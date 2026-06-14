@@ -14,9 +14,75 @@ class TK_Route_Fields {
 
     /* ── Native meta boxes (no ACF) ────────────── */
     public static function register_meta_boxes() {
+        add_meta_box( 'tk-route-import', __( 'Import from TrailKit Planner', 'trailkit' ), [ self::class, 'box_import' ], 'tk_route', 'normal', 'high' );
         add_meta_box( 'tk-route-stats',  __( 'Route Details', 'trailkit' ),    [ self::class, 'box_stats'  ], 'tk_route', 'normal', 'high' );
         add_meta_box( 'tk-route-gps',    __( 'GPS & Map',     'trailkit' ),    [ self::class, 'box_gps'    ], 'tk_route', 'normal' );
         add_meta_box( 'tk-route-media',  __( 'Gallery & Links', 'trailkit' ),  [ self::class, 'box_media'  ], 'tk_route', 'side' );
+    }
+
+    public static function box_import( $post ) {
+        ?>
+        <p style="margin:0 0 8px;color:#6b7280;font-size:13px">
+            <?php esc_html_e( 'Paste the JSON copied from the TrailKit Planner (⎘ Copy JSON) or a GPX file content. Auto-fills distance, elevation, start coords, and GPS track.', 'trailkit' ) ?>
+        </p>
+        <textarea id="tk-route-import-data" rows="5" placeholder="<?php esc_attr_e( 'Paste route JSON or GPX content here…', 'trailkit' ) ?>" style="width:100%;font-family:monospace;font-size:11px;border:1px solid #d1d5db;border-radius:4px;padding:6px 8px;box-sizing:border-box;resize:vertical"></textarea>
+        <button type="button" id="tk-route-import-btn" class="button button-secondary" style="margin-top:6px">
+            <?php esc_html_e( 'Import', 'trailkit' ) ?>
+        </button>
+        <span id="tk-route-import-msg" style="margin-left:8px;font-size:12px;color:#059669;display:none"><?php esc_html_e( '✓ Fields filled — save the post to apply.', 'trailkit' ) ?></span>
+        <span id="tk-route-import-err" style="margin-left:8px;font-size:12px;color:#dc2626;display:none"><?php esc_html_e( 'Could not parse — check the pasted content.', 'trailkit' ) ?></span>
+        <script>
+        (function(){
+            function fmtDur(sec) {
+                var h = Math.floor(sec / 3600), m = Math.floor((sec % 3600) / 60);
+                return h > 0 ? h + 'h ' + m + 'm' : m + ' min';
+            }
+            function fillRoute(d) {
+                if (d.distance_km  != null) document.querySelector('[name="_tk_distance"]').value  = parseFloat(d.distance_km).toFixed(2);
+                if (d.elev_gain    != null) document.querySelector('[name="_tk_elevation"]').value = Math.round(d.elev_gain);
+                if (d.duration_sec != null) document.querySelector('[name="_tk_time"]').value      = fmtDur(d.duration_sec);
+                if (d.start) {
+                    if (d.start.lat != null) document.querySelector('[name="_tk_lat"]').value = d.start.lat;
+                    if (d.start.lng != null) document.querySelector('[name="_tk_lng"]').value = d.start.lng;
+                    document.querySelector('[name="_tk_gmaps_url"]').value =
+                        'https://www.google.com/maps?q=' + parseFloat(d.start.lat).toFixed(7) + ',' + parseFloat(d.start.lng).toFixed(7);
+                }
+                if (d.points && d.points.length) {
+                    document.querySelector('[name="_tk_points"]').value = JSON.stringify(d.points);
+                    if (!d.start) {
+                        document.querySelector('[name="_tk_lat"]').value = d.points[0].lat;
+                        document.querySelector('[name="_tk_lng"]').value = d.points[0].lng;
+                    }
+                }
+            }
+            document.getElementById('tk-route-import-btn').addEventListener('click', function(){
+                var msg  = document.getElementById('tk-route-import-msg');
+                var err  = document.getElementById('tk-route-import-err');
+                var text = document.getElementById('tk-route-import-data').value.trim();
+                msg.style.display = err.style.display = 'none';
+                try {
+                    var d;
+                    if (text.startsWith('<')) {
+                        var xml   = new DOMParser().parseFromString(text, 'text/xml');
+                        var trkpts = Array.from(xml.querySelectorAll('trkpt'));
+                        if (!trkpts.length) throw new Error('no trkpt');
+                        var points = trkpts.map(function(pt){
+                            var ele = pt.querySelector('ele');
+                            return { lat: parseFloat(pt.getAttribute('lat')), lng: parseFloat(pt.getAttribute('lon')), ele: ele ? parseFloat(ele.textContent) : 0 };
+                        });
+                        d = { points: points, start: { lat: points[0].lat, lng: points[0].lng } };
+                    } else {
+                        d = JSON.parse(text);
+                    }
+                    fillRoute(d);
+                    msg.style.display = 'inline';
+                } catch(e) {
+                    err.style.display = 'inline';
+                }
+            });
+        })();
+        </script>
+        <?php
     }
 
     public static function box_stats( $post ) {
