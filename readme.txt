@@ -4,7 +4,7 @@ Tags: routes, maps, hiking, outdoor, guides
 Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -92,6 +92,16 @@ The map tiles are loaded from OpenStreetMap. Check that your server allows outgo
 Visit [trailplugin.com](https://trailplugin.com) to purchase a license or start a free 14-day trial. After purchase, enter your key in Routes → Settings → Pro License.
 
 == Changelog ==
+
+= 1.0.1 =
+* Route import box: accepts both JSON (from TrailKit Planner) and GPX files — auto-detected by format
+* Route import fills distance, elevation gain/loss, duration, start coordinates, and full track points
+* POI import box: accepts JSON and GPX files — fills lat/lng, name, category, description, and Google Maps URL
+* Added Category field to POIs (free text input)
+* Added Description field to POIs (shown on single POI page with styled left-border block)
+* Elevation chart: filter out zero-elevation points from routes with partial elevation data
+* Elevation chart: fill area now always extends down to 0 m baseline
+* Elevation chart: fixed canvas path split bug (moveTo inside smoothPathFraction caused a diagonal artifact)
 
 = 1.0.0 =
 * Initial release
