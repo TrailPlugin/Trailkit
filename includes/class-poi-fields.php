@@ -11,8 +11,73 @@ class TK_POI_Fields {
 
     /* ── Native meta boxes ──────────────────────── */
     public static function register_meta_boxes() {
-        add_meta_box( 'tk-poi-location', __( 'Location & Details', 'trailkit' ), [ self::class, 'box_location' ], 'tk_poi', 'normal', 'high' );
-        add_meta_box( 'tk-poi-media',    __( 'Gallery & Links',    'trailkit' ), [ self::class, 'box_media'    ], 'tk_poi', 'side' );
+        add_meta_box( 'tk-poi-import',   __( 'Import from TrailKit Planner', 'trailkit' ), [ self::class, 'box_import'   ], 'tk_poi', 'normal', 'high' );
+        add_meta_box( 'tk-poi-location', __( 'Location & Details',           'trailkit' ), [ self::class, 'box_location' ], 'tk_poi', 'normal', 'high' );
+        add_meta_box( 'tk-poi-media',    __( 'Gallery & Links',              'trailkit' ), [ self::class, 'box_media'    ], 'tk_poi', 'side' );
+    }
+
+    public static function box_import( $post ) {
+        ?>
+        <p style="margin:0 0 8px;color:#6b7280;font-size:13px">
+            <?php esc_html_e( 'Paste a GPX file (open it in a text editor and copy all) or the JSON copied from the TrailKit Planner, then click Import.', 'trailkit' ) ?>
+        </p>
+        <textarea id="tk-poi-import-data" rows="5" placeholder="<?php esc_attr_e( 'Paste GPX content or JSON here…', 'trailkit' ) ?>" style="width:100%;font-family:monospace;font-size:11px;border:1px solid #d1d5db;border-radius:4px;padding:6px 8px;box-sizing:border-box;resize:vertical"></textarea>
+        <button type="button" id="tk-poi-import-btn" class="button button-secondary" style="margin-top:6px">
+            <?php esc_html_e( 'Import', 'trailkit' ) ?>
+        </button>
+        <span id="tk-poi-import-msg" style="margin-left:8px;font-size:12px;color:#059669;display:none"><?php esc_html_e( '✓ Fields filled — save the post to apply.', 'trailkit' ) ?></span>
+        <span id="tk-poi-import-err" style="margin-left:8px;font-size:12px;color:#dc2626;display:none"><?php esc_html_e( 'Could not parse — check the pasted content.', 'trailkit' ) ?></span>
+        <script>
+        (function(){
+            function fillFields(d) {
+                if (d.name) {
+                    var t = document.getElementById('title');
+                    if (t) t.value = d.name;
+                }
+                if (d.lat  != null) document.querySelector('[name="_tk_lat"]').value         = d.lat;
+                if (d.lng  != null) document.querySelector('[name="_tk_lng"]').value         = d.lng;
+                if (d.category)     document.querySelector('[name="_tk_category"]').value    = d.category;
+                if (d.description)  document.querySelector('[name="_tk_description"]').value = d.description;
+                if (d.lat != null && d.lng != null) {
+                    document.querySelector('[name="_tk_gmaps_url"]').value =
+                        'https://www.google.com/maps?q=' + parseFloat(d.lat).toFixed(7) + ',' + parseFloat(d.lng).toFixed(7);
+                }
+            }
+
+            document.getElementById('tk-poi-import-btn').addEventListener('click', function(){
+                var msg  = document.getElementById('tk-poi-import-msg');
+                var err  = document.getElementById('tk-poi-import-err');
+                var text = document.getElementById('tk-poi-import-data').value.trim();
+                msg.style.display = err.style.display = 'none';
+                try {
+                    var d;
+                    if (text.startsWith('<')) {
+                        // GPX / XML — grab first <wpt> element
+                        var xml = new DOMParser().parseFromString(text, 'text/xml');
+                        var wpt = xml.querySelector('wpt');
+                        if (!wpt) throw new Error('no wpt');
+                        var get = function(tag){ var el = wpt.querySelector(tag); return el ? el.textContent.trim() : ''; };
+                        d = {
+                            name:        get('name'),
+                            lat:         parseFloat(wpt.getAttribute('lat')),
+                            lng:         parseFloat(wpt.getAttribute('lon')),
+                            category:    get('type'),
+                            description: get('desc'),
+                        };
+                    } else {
+                        // JSON (single object or first item of array)
+                        var parsed = JSON.parse(text);
+                        d = Array.isArray(parsed) ? parsed[0] : parsed;
+                    }
+                    fillFields(d);
+                    msg.style.display = 'inline';
+                } catch(e) {
+                    err.style.display = 'inline';
+                }
+            });
+        })();
+        </script>
+        <?php
     }
 
     public static function box_location( $post ) {
@@ -25,6 +90,14 @@ class TK_POI_Fields {
                 <input type="text" name="_tk_lat" value="<?php echo esc_attr($d['lat']) ?>" placeholder="10.4806"></td>
                 <td><label><?php esc_html_e('Longitude','trailkit') ?></label>
                 <input type="text" name="_tk_lng" value="<?php echo esc_attr($d['lng']) ?>" placeholder="-66.9036"></td>
+            </tr>
+            <tr>
+                <td colspan="2"><label><?php esc_html_e('Category','trailkit') ?></label>
+                <input type="text" name="_tk_category" value="<?php echo esc_attr($d['category']) ?>" placeholder="e.g. Waterfall, Mountain, Cave…" style="width:100%"></td>
+            </tr>
+            <tr>
+                <td colspan="2"><label><?php esc_html_e('Description','trailkit') ?></label>
+                <textarea name="_tk_description" rows="3" style="width:100%;resize:vertical"><?php echo esc_textarea($d['description']) ?></textarea></td>
             </tr>
             <tr>
                 <td colspan="2"><label><?php esc_html_e('Conditions alert (optional)','trailkit') ?></label>
@@ -79,6 +152,8 @@ class TK_POI_Fields {
         $fields = [
             '_tk_lat'              => 'sanitize_text_field',
             '_tk_lng'              => 'sanitize_text_field',
+            '_tk_category'         => 'sanitize_text_field',
+            '_tk_description'      => 'sanitize_textarea_field',
             '_tk_conditions_alert' => 'sanitize_text_field',
             '_tk_hero_position'    => 'sanitize_text_field',
             '_tk_gmaps_url'        => 'esc_url_raw',
@@ -97,6 +172,8 @@ class TK_POI_Fields {
         return [
             'lat'              => get_post_meta( $post_id, '_tk_lat',              true ),
             'lng'              => get_post_meta( $post_id, '_tk_lng',              true ),
+            'category'         => get_post_meta( $post_id, '_tk_category',         true ),
+            'description'      => get_post_meta( $post_id, '_tk_description',      true ),
             'conditions_alert' => get_post_meta( $post_id, '_tk_conditions_alert', true ),
             'hero_position'    => get_post_meta( $post_id, '_tk_hero_position',    true ) ?: 'center center',
             'gmaps_url'        => get_post_meta( $post_id, '_tk_gmaps_url',        true ),

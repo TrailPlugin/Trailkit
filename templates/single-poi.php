@@ -52,6 +52,11 @@ get_header();
                 <span class="tk-single__stat-value"><?php echo esc_html($types[0]->name) ?></span>
                 <span class="tk-single__stat-label"><?php esc_html_e('Type','trailkit') ?></span>
             </div>
+            <?php elseif ( $data['category'] ): ?>
+            <div class="tk-single__stat">
+                <span class="tk-single__stat-value"><?php echo esc_html($data['category']) ?></span>
+                <span class="tk-single__stat-label"><?php esc_html_e('Category','trailkit') ?></span>
+            </div>
             <?php endif; ?>
         </div>
     </div>
@@ -64,6 +69,10 @@ get_header();
             <svg viewBox="0 0 20 20" fill="currentColor" width="18" height="18"><path fill-rule="evenodd" d="M8.485 2.495c.673-1.167 2.357-1.167 3.03 0l6.28 10.875c.673 1.167-.17 2.625-1.516 2.625H3.72c-1.347 0-2.189-1.458-1.515-2.625L8.485 2.495zM10 5a.75.75 0 01.75.75v3.5a.75.75 0 01-1.5 0v-3.5A.75.75 0 0110 5zm0 9a1 1 0 100-2 1 1 0 000 2z"/></svg>
             <?php echo esc_html($data['conditions_alert']) ?>
         </div>
+        <?php endif; ?>
+
+        <?php if ( $data['description'] ): ?>
+        <p class="tk-single__description"><?php echo esc_html($data['description']) ?></p>
         <?php endif; ?>
 
         <div class="tk-single__content">
