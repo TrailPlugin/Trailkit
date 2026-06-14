@@ -1,0 +1,66 @@
+name: Build & Release Plugin
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version (e.g. 1.2.0)'
+        required: true
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Resolve version
+        id: version
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "tag=v${{ github.event.inputs.version }}" >> $GITHUB_OUTPUT
+            echo "num=${{ github.event.inputs.version }}" >> $GITHUB_OUTPUT
+          else
+            TAG="${GITHUB_REF_NAME}"
+            echo "tag=${TAG}" >> $GITHUB_OUTPUT
+            echo "num=${TAG#v}" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Build ZIP
+        run: |
+          VERSION="${{ steps.version.outputs.num }}"
+          ZIP_NAME="trailkit-${VERSION}.zip"
+          mkdir -p /tmp/build/trailkit
+
+          rsync -a \
+            --exclude='.git' \
+            --exclude='.gitignore' \
+            --exclude='build-zip.ps1' \
+            --exclude='PRIVACY-POLICY.md' \
+            --exclude='.github' \
+            ./ /tmp/build/trailkit/
+
+          cd /tmp/build
+          zip -r "${ZIP_NAME}" trailkit/
+          echo "ZIP_PATH=/tmp/build/${ZIP_NAME}" >> $GITHUB_ENV
+          echo "ZIP_NAME=${ZIP_NAME}" >> $GITHUB_ENV
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.version.outputs.tag }}
+          name: TrailKit ${{ steps.version.outputs.tag }}
+          body: |
+            ## TrailKit ${{ steps.version.outputs.tag }}
+
+            Download the plugin ZIP below and install via WordPress → Plugins → Add New → Upload.
+
+            **Requirements:** WordPress 5.8+, PHP 7.4+
+          files: ${{ env.ZIP_PATH }}
+          draft: false
+          prerelease: false
