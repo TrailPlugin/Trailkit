@@ -4,7 +4,7 @@ Tags: routes, maps, hiking, outdoor, guides
 Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.0.1
+Stable tag: 1.0.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -37,6 +37,7 @@ TrailKit gives you three powerful Custom Post Types to build outdoor and adventu
 `[tk_pois type="waterfall" region="andes" limit="9"]`
 `[tk_guides featured="true" specialty="climbing"]`
 `[tk_map type="routes" height="450px" lat="10.48" lng="-66.90" zoom="8"]`
+`[tk_map type="all" height="500px"]`
 
 = Upgrade to Pro =
 
@@ -92,6 +93,13 @@ The map tiles are loaded from OpenStreetMap. Check that your server allows outgo
 Visit [trailplugin.com](https://trailplugin.com) to purchase a license or start a free 14-day trial. After purchase, enter your key in Routes → Settings → Pro License.
 
 == Changelog ==
+
+= 1.0.2 =
+* `[tk_map]` now supports `type="guides"` to display guide markers only
+* `[tk_map type="all"]` now includes guides alongside routes and POIs (previously routes + POIs only)
+* Guide markers rendered in blue (`#38bdf8`) with a translucent service-area radius circle
+* Guide popups show specialties and starting daily rate
+* Fixed: filter-pill click on embedded maps now dismisses the "click to interact" overlay immediately
 
 = 1.0.1 =
 * Route import box: accepts both JSON (from TrailKit Planner) and GPX files — auto-detected by format
