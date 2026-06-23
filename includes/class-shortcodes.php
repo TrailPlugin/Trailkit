@@ -164,7 +164,7 @@ class TK_Shortcodes {
     // Usage: [tk_map type="routes" region="andes" height="450px" zoom="7" lat="10.48" lng="-66.90"]
     public static function map( $atts ) {
         $a = shortcode_atts( [
-            'type'   => 'routes',   // routes | pois | all
+            'type'   => 'routes',   // routes | pois | guides | all
             'region' => '',
             'height' => '450px',
             'zoom'   => '7',

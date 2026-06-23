@@ -48,19 +48,46 @@
     .then(function (res) {
       if (!res.success) return;
       res.data.forEach(function (m) {
-        var color   = m.type === 'route' ? tkDiffColor(m.difficulty) : '#6366f1';
-        var icon    = L.divIcon({
+        var color = m.type === 'route'  ? tkDiffColor(m.difficulty)
+                  : m.type === 'guide' ? '#38bdf8'
+                  : '#6366f1';
+
+        /* Guide service-area circle */
+        if (m.type === 'guide' && m.radius_km) {
+          L.circle([m.lat, m.lng], {
+            radius:      m.radius_km * 1000,
+            color:       '#0ea5e9',
+            weight:      1.5,
+            opacity:     0.6,
+            fillColor:   '#38bdf8',
+            fillOpacity: 0.08,
+          }).addTo(map);
+        }
+
+        var icon = L.divIcon({
           className: 'tk-map-pin',
           html: '<span style="background:' + color + '"></span>',
           iconSize: [16, 16],
           iconAnchor: [8, 8],
         });
 
+        var viewLabel = typeof tkStrings !== 'undefined' ? tkStrings.view : 'View →';
         var popup = '<div class="tk-popup">'
           + (m.thumb ? '<img src="' + tkEscape(m.thumb) + '" alt="">' : '')
-          + '<strong>' + tkEscape(m.title) + '</strong>'
-          + (m.distance ? '<span>' + tkEscape(String(m.distance)) + ' km</span> ' : '')
-          + '<a href="' + tkEscape(m.url) + '">' + (typeof tkStrings !== 'undefined' ? tkStrings.view : 'View →') + '</a>'
+          + '<strong>' + tkEscape(m.title) + '</strong>';
+
+        if (m.type === 'guide') {
+          if (m.specialties && m.specialties.length) {
+            popup += '<span>' + tkEscape(m.specialties.join(', ')) + '</span> ';
+          }
+          if (m.price_from) {
+            popup += '<span>From $' + tkEscape(String(m.price_from)) + '/day</span> ';
+          }
+        } else {
+          if (m.distance) popup += '<span>' + tkEscape(String(m.distance)) + ' km</span> ';
+        }
+
+        popup += '<a href="' + tkEscape(m.url) + '">' + viewLabel + '</a>'
           + '</div>';
 
         L.marker([m.lat, m.lng], { icon: icon })

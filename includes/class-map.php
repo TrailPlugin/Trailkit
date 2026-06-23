@@ -53,6 +53,31 @@ class TK_Map {
             wp_reset_postdata();
         }
 
+        if ( in_array( $type, [ 'guides', 'all' ] ) ) {
+            $args = [ 'post_type' => 'tk_guide', 'posts_per_page' => 200, 'post_status' => 'publish' ];
+            $q = new WP_Query( $args );
+            foreach ( $q->posts as $p ) {
+                $lat = get_post_meta( $p->ID, '_tk_lat', true );
+                $lng = get_post_meta( $p->ID, '_tk_lng', true );
+                if ( ! $lat || ! $lng ) continue;
+                $specs_raw   = get_post_meta( $p->ID, '_tk_specialties', true );
+                $specialties = $specs_raw ? json_decode( wp_unslash( $specs_raw ), true ) : [];
+                $markers[] = [
+                    'type'        => 'guide',
+                    'id'          => $p->ID,
+                    'title'       => $p->post_title,
+                    'url'         => get_permalink( $p->ID ),
+                    'lat'         => floatval( $lat ),
+                    'lng'         => floatval( $lng ),
+                    'radius_km'   => intval( get_post_meta( $p->ID, '_tk_radius_km',   true ) ?: 50 ),
+                    'price_from'  => floatval( get_post_meta( $p->ID, '_tk_price_from', true ) ),
+                    'specialties' => is_array( $specialties ) ? $specialties : [],
+                    'thumb'       => get_the_post_thumbnail_url( $p->ID, 'thumbnail' ) ?: '',
+                ];
+            }
+            wp_reset_postdata();
+        }
+
         return $markers;
     }
 }
