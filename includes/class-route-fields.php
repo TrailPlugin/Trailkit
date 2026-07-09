@@ -18,6 +18,15 @@ class TK_Route_Fields {
         add_meta_box( 'tk-route-stats',  __( 'Route Details', 'trailkit' ),    [ self::class, 'box_stats'  ], 'tk_route', 'normal', 'high' );
         add_meta_box( 'tk-route-gps',    __( 'GPS & Map',     'trailkit' ),    [ self::class, 'box_gps'    ], 'tk_route', 'normal' );
         add_meta_box( 'tk-route-media',  __( 'Gallery & Links', 'trailkit' ),  [ self::class, 'box_media'  ], 'tk_route', 'side' );
+        add_meta_box( 'tk-route-embed',  __( 'Map Embed / Shortcode', 'trailkit' ), [ 'TK_Shortcodes', 'embed_builder_box' ], 'tk_route', 'side', 'default', [ 'toggles' => [
+            'title'      => __( 'Title',              'trailkit' ),
+            'difficulty' => __( 'Difficulty',         'trailkit' ),
+            'distance'   => __( 'Distance',           'trailkit' ),
+            'elevation'  => __( 'Elevation gain',     'trailkit' ),
+            'time'       => __( 'Estimated time',     'trailkit' ),
+            'gallery'    => __( 'Gallery',            'trailkit' ),
+            'mapsbtn'    => __( 'Google Maps button', 'trailkit' ),
+        ] ] );
     }
 
     public static function box_import( $post ) {

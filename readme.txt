@@ -4,7 +4,7 @@ Tags: routes, maps, hiking, outdoor, guides
 Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.0.2
+Stable tag: 1.0.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -93,6 +93,13 @@ The map tiles are loaded from OpenStreetMap. Check that your server allows outgo
 Visit [trailplugin.com](https://trailplugin.com) to purchase a license or start a free 14-day trial. After purchase, enter your key in Routes → Settings → Pro License.
 
 == Changelog ==
+
+= 1.0.3 =
+* New: `[tk_map id="123"]` embeds the map of a single route, POI, or guide anywhere (e.g. inside a blog post) — shows only the map by default
+* New: info toggles on the single-item map — `title`, `mapsbtn` (Open in Google Maps), plus per-type blocks: `category`/`coords`/`description` (POI), `difficulty`/`distance`/`elevation`/`time` (route), `specialties`/`price`/`contact`/`radius` (guide), and `gallery`
+* New: "Map Embed / Shortcode" box in the POI, route, and guide editors — tick what to show and copy the generated shortcode
+* Routes render their full GPS track fitted to the map; guides render a service-area circle
+* Fixed: embedded maps now initialize reliably inside block themes (FSE) — map init is emitted inline on DOMContentLoaded instead of relying on the enqueued script's "after" data, which block themes did not always print
 
 = 1.0.2 =
 * `[tk_map]` now supports `type="guides"` to display guide markers only

@@ -461,6 +461,22 @@ class TK_Documentation {
                     ],
                     'example' => '[tk_map type="all" height="500px" zoom="6" lat="8.0" lng="-66.0"]',
                 ],
+                [
+                    'tag'  => '[tk_map id="…"]',
+                    'desc' => 'Embeds the map of a single route, POI, or guide anywhere (e.g. inside a blog post). Shows only the map by default — turn extra info on with the toggles below, or build it visually from the "Map Embed / Shortcode" box in the item editor.',
+                    'attrs' => [
+                        ['id',      '123',    'ID of a published route, POI, or guide (required)'],
+                        ['zoom',    '13',     'Initial zoom (ignored for routes with a GPS track — those fit the line)'],
+                        ['height',  '"450px"', 'Map height (any CSS value)'],
+                        ['title',   '"on"',   'Show the item title above the map'],
+                        ['mapsbtn', '"on"',   'Show the "Open in Google Maps" button'],
+                        ['gallery', '"on"',   'Show the image gallery (routes / POIs)'],
+                        ['category / coords / description', '"on"', 'POI info blocks'],
+                        ['difficulty / distance / elevation / time', '"on"', 'Route stat blocks'],
+                        ['specialties / price / contact / radius', '"on"', 'Guide info blocks (radius draws the service-area circle)'],
+                    ],
+                    'example' => '[tk_map id="323" zoom="13" mapsbtn="on" title="on"]',
+                ],
             ];
             foreach ( $shortcodes as $sc ): ?>
             <div class="tk-docs-shortcode">

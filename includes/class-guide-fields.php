@@ -31,6 +31,14 @@ class TK_Guide_Fields {
         add_meta_box( 'tk-guide-specialties', __( 'Specialties',    'trailkit' ), [ self::class, 'box_specialties' ], 'tk_guide', 'normal' );
         add_meta_box( 'tk-guide-location',    __( 'Service Area',   'trailkit' ), [ self::class, 'box_location'    ], 'tk_guide', 'normal' );
         add_meta_box( 'tk-guide-photo',       __( 'Profile Photo',  'trailkit' ), [ self::class, 'box_photo'       ], 'tk_guide', 'side' );
+        add_meta_box( 'tk-guide-embed',       __( 'Map Embed / Shortcode', 'trailkit' ), [ 'TK_Shortcodes', 'embed_builder_box' ], 'tk_guide', 'side', 'default', [ 'toggles' => [
+            'title'       => __( 'Title',              'trailkit' ),
+            'specialties' => __( 'Specialties',        'trailkit' ),
+            'price'       => __( 'Price from',         'trailkit' ),
+            'contact'     => __( 'Contact links',      'trailkit' ),
+            'radius'      => __( 'Service-area circle', 'trailkit' ),
+            'mapsbtn'     => __( 'Google Maps button', 'trailkit' ),
+        ] ] );
     }
 
     public static function box_contact( $post ) {

@@ -3,7 +3,7 @@
  * Plugin Name: TrailKit — Adventure Routes, POIs & Guides
  * Plugin URI:  https://trailplugin.com
  * Description: Adventure Routes, Points of Interest & Guides for WordPress. Works with any theme.
- * Version:     1.0.2
+ * Version:     1.0.3
  * Author:      Gabriel Arias
  * Author URI:  https://gabriel-arias-portfolio.vercel.app/
  * Text Domain: trailkit
@@ -13,7 +13,7 @@
 
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-define( 'TK_VERSION',     '1.0.2' );
+define( 'TK_VERSION',     '1.0.3' );
 define( 'TK_DIR',         plugin_dir_path( __FILE__ ) );
 define( 'TK_URL',         plugin_dir_url( __FILE__ ) );
 define( 'TK_API_URL',     'https://trailplugin.com' );

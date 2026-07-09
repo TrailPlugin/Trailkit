@@ -14,6 +14,14 @@ class TK_POI_Fields {
         add_meta_box( 'tk-poi-import',   __( 'Import from TrailKit Planner', 'trailkit' ), [ self::class, 'box_import'   ], 'tk_poi', 'normal', 'high' );
         add_meta_box( 'tk-poi-location', __( 'Location & Details',           'trailkit' ), [ self::class, 'box_location' ], 'tk_poi', 'normal', 'high' );
         add_meta_box( 'tk-poi-media',    __( 'Gallery & Links',              'trailkit' ), [ self::class, 'box_media'    ], 'tk_poi', 'side' );
+        add_meta_box( 'tk-poi-embed',    __( 'Map Embed / Shortcode',        'trailkit' ), [ 'TK_Shortcodes', 'embed_builder_box' ], 'tk_poi', 'side', 'default', [ 'toggles' => [
+            'title'       => __( 'Title',              'trailkit' ),
+            'category'    => __( 'Category',           'trailkit' ),
+            'coords'      => __( 'Coordinates',        'trailkit' ),
+            'description' => __( 'Description',         'trailkit' ),
+            'gallery'     => __( 'Gallery',            'trailkit' ),
+            'mapsbtn'     => __( 'Google Maps button', 'trailkit' ),
+        ] ] );
     }
 
     public static function box_import( $post ) {
